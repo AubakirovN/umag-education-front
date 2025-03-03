@@ -1,2 +1,11 @@
-# umag-education-front
-umag education project front page
+# [Umag](https://umag.kz) frontend repository
+
+## Tech stack:
+* React
+* Typescript
+* Redux + RTK
+* Mantine UI
+
+
+
+1
