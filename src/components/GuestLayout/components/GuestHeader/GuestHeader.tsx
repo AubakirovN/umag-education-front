@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Group, TextInput } from "@mantine/core";
+import { Box, Button, Flex, TextInput } from "@mantine/core";
 // import { useStyles } from "./styles.ts";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher/LanguageSwitcher.tsx";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";

@@ -1,7 +1,7 @@
 import { Badge, Card, Flex, Grid, Text, Title } from "@mantine/core";
 import styles from "./Course.module.css";
 
-export const CourseMain = ({ course }) => {
+export const CourseMain = ({ course }: any) => {
   return (
     <Card
       className={styles.courseMainCard}

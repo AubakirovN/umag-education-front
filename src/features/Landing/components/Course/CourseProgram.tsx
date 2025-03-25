@@ -1,4 +1,4 @@
-import { Card, Flex, List, Text, Title } from "@mantine/core";
+import { Card, Flex, Text, Title } from "@mantine/core";
 import styles from "./Course.module.css";
 
 const coursePrograms = [
