@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <HttpInterceptor>
       <QueryClientProvider client={queryClient}>
-        <MantineProvider withGlobalStyles withNormalizeCSS>
+        <MantineProvider withCSSVariables withGlobalStyles withNormalizeCSS>
           <Notifications />
           <Suspense>
             <Provider store={store}>

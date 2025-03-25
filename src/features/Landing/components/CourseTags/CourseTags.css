@@ -1,0 +1,6 @@
+.asd {
+  border: 1px solid #fff !important;
+}
+.asd:checked {
+  background: #2DBE61 !important;
+}

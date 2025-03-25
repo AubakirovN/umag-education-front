@@ -21,7 +21,7 @@ const useStyles = createStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     textDecoration: "none",
-    fontSize: theme.fontSizes.sm,
+    fontSize: 16,
     color:
       theme.colorScheme === "dark"
         ? theme.colors.dark[1]

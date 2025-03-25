@@ -1,5 +1,6 @@
 import { Anchor, Breadcrumbs } from "@mantine/core";
 import { useTranslation } from "react-i18next";
+import { Course } from "../../components/Course";
 
 export const CoursePage = () => {
   const { t } = useTranslation();
@@ -11,6 +12,9 @@ export const CoursePage = () => {
     </Anchor>
   ));
   return (
+    <>
     <Breadcrumbs>{items}</Breadcrumbs>
+    <Course />
+    </>
   )
 }
