@@ -14,8 +14,6 @@ import { useForm } from "@mantine/form";
 import { IconAlertCircleFilled } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { IMaskInput } from "react-imask";
 
 interface RegisterModalProps {

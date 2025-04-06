@@ -1,6 +1,5 @@
 import {
   createBrowserRouter,
-  Navigate,
   RouterProvider,
   ScrollRestoration,
 } from "react-router-dom";
