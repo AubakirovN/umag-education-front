@@ -13,6 +13,7 @@ export interface CustomModalProps {
   size?: string | number;
   children: ReactNode;
   scrolling?: boolean;
+  fz?: string | number;
   [key: string]: any;
 }
 
@@ -23,6 +24,7 @@ export function CustomModal({
   children,
   size,
   scrolling,
+  fz,
   ...props
 }: CustomModalProps) {
   const { classes } = useStyles();
@@ -31,6 +33,11 @@ export function CustomModal({
       classNames={{ content: classes.overflow }}
       size={size}
       centered
+      styles={{
+        title: { fontSize: fz || 16 },
+        header: { borderRadius: 10 },
+        body: { borderRadius: 10 },
+      }}
       // closeOnClickOutside={false}
       onClose={onClose}
       title={title}

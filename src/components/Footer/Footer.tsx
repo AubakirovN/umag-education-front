@@ -1,8 +1,8 @@
 import { Text, Container } from "@mantine/core";
-import { useStyles } from "./styles.tsx";
+import { useStyles } from "./styles";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
 
-export function GuestFooter() {
+export function Footer() {
   const { classes } = useStyles();
 
   return (

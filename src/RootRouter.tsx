@@ -1,5 +1,6 @@
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
   ScrollRestoration,
 } from "react-router-dom";
@@ -7,8 +8,9 @@ import {
 import { LandingPage } from "./features/Landing/pages/LandingPage";
 import { GuestLayout } from "./components/GuestLayout";
 import { ErrorPage } from "./features/Error/pages";
-import { AuthRouter } from "./features/Auth/AuthRouter.tsx";
 import { CoursePage } from "./features/Landing/pages/CoursePage/CoursePage.tsx";
+import { AppLayout } from "./components/AppLayout/AppLayout.tsx";
+import { ClientCoursePage } from "./features/Landing/pages/ClientCoursePage/ClientCoursePage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -22,9 +24,14 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <LandingPage /> },
       { path: "/courses/:id", element: <CoursePage /> },
-      { path: "login/*", element: <AuthRouter /> },
-      // { path: "horses", element: <HorsesPage /> },
-      // { path: "horses/:id", element: <HorsePage /> },
+    ],
+  },
+  {
+    path: "/app",
+    element: <AppLayout />,
+    children: [
+      { path: "", element: <LandingPage /> },
+      { path: "courses/:id", element: <ClientCoursePage /> },
     ],
   },
   {

@@ -3,6 +3,7 @@ import { resetAll } from "../resetAction";
 
 interface UserState {
   currentUser: any;
+  isAuthenticated: boolean;
 }
 
 const initialState: UserState = {
@@ -17,6 +18,7 @@ const initialState: UserState = {
     permissions: [],
     status: "",
   },
+  isAuthenticated: false,
 };
 
 const userSlice = createSlice({
@@ -26,6 +28,12 @@ const userSlice = createSlice({
     setUser: (state, action) => {
       state.currentUser = action.payload;
     },
+    setLogin: (state) => {
+      state.isAuthenticated = true;
+    },
+    setLogout: (state) => {
+      state.isAuthenticated = false;
+    },
     resetUser: () => initialState,
   },
   extraReducers: (builder) => {
@@ -33,5 +41,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, resetUser } = userSlice.actions;
+export const { setUser, setLogin, setLogout, resetUser } = userSlice.actions;
 export default userSlice.reducer;

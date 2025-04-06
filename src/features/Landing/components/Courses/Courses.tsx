@@ -1,5 +1,7 @@
+import { RootState } from "@/store";
 import { Badge, Button, Card, Flex, Grid, Group, Text } from "@mantine/core";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const courses = [
@@ -175,12 +177,12 @@ const courses = [
 
 export const Courses = () => {
   const navigate = useNavigate();
+  const isAuth = useSelector((state: RootState) => state.user.isAuthenticated);
   const step = 12;
   const [visibleCount, setVisibleCount] = useState(step);
   const showMore = () => {
     setVisibleCount((prevCount) => prevCount + step);
   };
-  console.log(visibleCount);
   return (
     <>
       {/* <CourseSearcher /> */}
@@ -194,7 +196,13 @@ export const Courses = () => {
               withBorder
               h="100%"
               pos="relative"
-              onClick={() => navigate(`/courses/${course?.id}`)}
+              onClick={() =>
+                navigate(
+                  !isAuth
+                    ? `/courses/${course?.id}`
+                    : `/app/courses/${course?.id}`
+                )
+              }
               sx={{
                 cursor: "pointer",
                 backgroundImage: `url('img/customer.png')`,

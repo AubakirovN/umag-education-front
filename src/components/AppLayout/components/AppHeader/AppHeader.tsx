@@ -1,20 +1,14 @@
 import { Box, Button, Flex, TextInput } from "@mantine/core";
-// import { useStyles } from "./styles.ts";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher/LanguageSwitcher.tsx";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
 import { IconSearch } from "@tabler/icons-react";
-import { LoginModal } from "@/features/Auth/components/LoginModal";
-import { useState } from "react";
-import { RegisterModal } from "@/features/Auth/components/RegisterModal";
+import { useNavigate } from "react-router-dom";
 
-export function GuestHeader() {
-  // const { classes } = useStyles();
-  const [loginModal, setLoginModal] = useState(false);
-  const [registerModal, setRegisterModal] = useState(false);
+export function AppHeader() {
+  const navigate = useNavigate();
 
   return (
     <Box mb={20} p={20}>
-      {/* <Box className={classes.hiddenMobile} style={{ background: "#ccc" }}> */}
       <Flex align="center" wrap="wrap">
         <Flex
           justify="space-between"
@@ -44,44 +38,19 @@ export function GuestHeader() {
             </Button>
             <LanguageSwitcher />
             <Button
-              variant="subtle"
-              style={{ color: "black" }}
-              radius={20}
-              fz={16}
-              onClick={() => setLoginModal(true)}
-            >
-              Вход
-            </Button>
-            <Button
               sx={{
                 backgroundColor: "#FFAE1F",
                 "&:hover": { backgroundColor: "#fff", color: "#000" },
               }}
               fz={16}
               radius={20}
-              onClick={() => setRegisterModal(true)}
+              onClick={() => navigate("/app/profile")}
             >
-              Регистрация
+              Личный кабинет
             </Button>
           </Flex>
         </Flex>
       </Flex>
-      <LoginModal
-        opened={loginModal}
-        onClose={() => setLoginModal(false)}
-        openRegister={() => {
-          setLoginModal(false);
-          setRegisterModal(true);
-        }}
-      />
-      <RegisterModal
-        opened={registerModal}
-        onClose={() => setRegisterModal(false)}
-        openLogin={() => {
-          setRegisterModal(false);
-          setLoginModal(true);
-        }}
-      />
     </Box>
   );
 }

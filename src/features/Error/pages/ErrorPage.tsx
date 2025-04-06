@@ -1,3 +1,4 @@
+import { RootState } from "@/store";
 import {
   createStyles,
   Title,
@@ -8,6 +9,7 @@ import {
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
@@ -65,6 +67,7 @@ export function ErrorPage() {
   const { status } = useParams();
   const [title, setTitle] = useState<string | null>();
   const [text, setText] = useState<string | null>();
+  const isAuth = useSelector((state: RootState) => state.user.isAuthenticated);
 
   const checkStatus = (error: string | undefined) => {
     switch (error) {
@@ -103,7 +106,7 @@ export function ErrorPage() {
         <Button
           variant="subtle"
           className={classes.button}
-          onClick={() => navigate("/")}
+          onClick={() => navigate(isAuth ? "/app" : "/")}
         >
           на главную
         </Button>

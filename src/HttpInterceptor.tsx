@@ -15,10 +15,10 @@ export const HttpInterceptor: React.FC<HttpInterceptorProps> = ({
   useEffect(() => {
     axios.interceptors.request.use(
       (config) => {
-        // const token = localStorage.getItem("accessToken");
-        // if (token) {
-          // config.headers.Authorization = `${token}`;
-        // }
+        const token = localStorage.getItem("accessToken");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
       },
       (error) => {
@@ -31,22 +31,13 @@ export const HttpInterceptor: React.FC<HttpInterceptorProps> = ({
         return response;
       },
       (error) => {
-        if (
-          error.response?.status === 401 &&
-          window.location.pathname !== "/login"
-        ) {
-          localStorage.removeItem("accessToken");
-          window.location.pathname = `/login`;
-          return Promise.reject(error);
-        } else if (error.response?.status === 403) {
+        if (error.response?.status === 403) {
           // window.location.pathname = `/app/home`;
           // return Promise.reject(error);
         } else if (
           // error.response?.status === 4040 ||
           error.response?.status === 400
         ) {
-          // window.location.pathname = `/${error.response.status}/error`;
-          console.log(error);
           notifications.show({
             title: `${t("errors.errorCode")} ${error.response?.status}.`,
             message: error.response?.data?.error?.message,
