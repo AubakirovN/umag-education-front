@@ -1,193 +1,67 @@
 import { RootState } from "@/store";
-import { Badge, Button, Card, Flex, Grid, Group, Text } from "@mantine/core";
-import { useState } from "react";
+import {
+  Badge,
+  Button,
+  Card,
+  Flex,
+  Grid,
+  Group,
+  LoadingOverlay,
+  Text,
+} from "@mantine/core";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
-const courses = [
-  {
-    id: 1,
-    title: "Курс  для технических специалистов ",
-    blockCount: 4,
-    lessonCount: 10,
-    tag: "Партнер",
-  },
-  {
-    id: 2,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 3,
-    title: "Course 2",
-    blockCount: 2,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 4,
-    title: "Course 2",
-    blockCount: 2,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 5,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 6,
-    title: "Course 1",
-    blockCount: 4,
-    lessonCount: 10,
-    tag: "Менеджер",
-  },
-  {
-    id: 7,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 8,
-    title: "Course 2",
-    blockCount: 2,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 9,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 10,
-    title: "Course 2",
-    blockCount: 4,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 11,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 12,
-    title: "Course 2",
-    blockCount: 2,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 13,
-    title: "Course 1",
-    blockCount: 4,
-    lessonCount: 10,
-    tag: "Партнер",
-  },
-  {
-    id: 14,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 15,
-    title: "Course 2",
-    blockCount: 2,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 16,
-    title: "Course 2",
-    blockCount: 2,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 17,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 18,
-    title: "Course 1",
-    blockCount: 4,
-    lessonCount: 10,
-    tag: "Менеджер",
-  },
-  {
-    id: 19,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 20,
-    title: "Course 2",
-    blockCount: 2,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 21,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 22,
-    title: "Course 2",
-    blockCount: 4,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 23,
-    title: "Course 2",
-    blockCount: 3,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-  {
-    id: 24,
-    title: "Course 2",
-    blockCount: 2,
-    lessonCount: 11,
-    tag: "Тех специалисты",
-  },
-];
+import { useLocation, useNavigate } from "react-router-dom";
+import { MRT_PaginationState } from "mantine-react-table";
+import { getCourses } from "@/core/api/courseApi";
 
 export const Courses = () => {
   const navigate = useNavigate();
   const isAuth = useSelector((state: RootState) => state.user.isAuthenticated);
-  const step = 12;
-  const [visibleCount, setVisibleCount] = useState(step);
+  const [courses, setCourses] = useState<any>([]);
+  const data: any[] = useMemo(() => courses || [], [courses]);
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
+    pageIndex: 0,
+    pageSize: 12,
+  });
+  const [totalRowCount, setTotalRowCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const showMore = () => {
-    setVisibleCount((prevCount) => prevCount + step);
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: prev.pageIndex + 1
+    }))
   };
+
+  const getData = async () => {
+    setIsLoading(true);
+    const params = {
+      page: pagination.pageIndex + 1,
+      perPage: pagination.pageSize,
+    };
+    try {
+      const response = await getCourses(params);
+      setCourses((prev: any) => ([...prev, ...response?.data]));
+      setTotalRowCount(response?.total);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [pagination.pageIndex])
+
+  console.log(courses);
+
   return (
     <>
       {/* <CourseSearcher /> */}
       <Grid mt={5}>
-        {courses?.slice(0, visibleCount)?.map((course, index) => (
+        <LoadingOverlay visible={isLoading} overlayBlur={2} />
+        {data?.slice(0, pagination.pageSize)?.map((course: any, index: number) => (
           <Grid.Col span={4} key={index} h="300px">
             <Card
               shadow="sm"
@@ -205,7 +79,7 @@ export const Courses = () => {
               }
               sx={{
                 cursor: "pointer",
-                backgroundImage: `url('img/customer.png')`,
+                backgroundImage: `url('/img/customer.png')`,
                 backgroundSize: "160px 160px",
                 backgroundPosition: "bottom right",
                 backgroundRepeat: "no-repeat",
@@ -220,7 +94,7 @@ export const Courses = () => {
                     {course?.title}
                   </Text>
                   <Text fz={14} color="dimmed">
-                    {course?.blockCount} блока {course?.lessonCount} уроков
+                    {course?.count_course_blocks} блока {course?.count_lessons} уроков
                   </Text>
                 </Flex>
                 <Group>
@@ -233,7 +107,7 @@ export const Courses = () => {
           </Grid.Col>
         ))}
       </Grid>
-      {visibleCount < courses?.length && (
+      {data?.length < totalRowCount && (
         <Flex justify="center" mt={20}>
           <Button
             variant="subtle"

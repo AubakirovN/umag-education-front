@@ -1,61 +1,49 @@
 import { CustomModal } from "@/components/CustomModal";
 import { LoadingBlock } from "@/components/LoadingBlock";
-import { register } from "@/core/api";
-import { RegisterDto } from "@/core/types";
-import { Alert, Button, InputBase, Text, TextInput } from "@mantine/core";
+import { PasswordStrength, getStrength } from "@/components/PasswordStrength";
+import { confirmPass, resetPass } from "@/core/api";
+import { ResetPassDto } from "@/core/types";
+import { openLoginModal } from "@/slice/userSlice";
+import {
+  Alert,
+  Button,
+  InputBase,
+  LoadingOverlay,
+  PasswordInput,
+  Text,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconAlertCircleFilled } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IMaskInput } from "react-imask";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-interface RegisterModalProps {
+interface RecoverModalProps {
   opened: boolean;
   onClose: () => void;
+  openLogin: () => void;
 }
 
-export function RegisterModal({ opened, onClose }: RegisterModalProps) {
+export const RecoverModal = ({
+  opened,
+  onClose,
+  openLogin,
+}: RecoverModalProps) => {
   const { t } = useTranslation("auth");
+
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const [err, setErr] = useState("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     initialValues: {
-      name: "",
-      email: "",
       phone: "",
     },
 
     validate: {
-      name: (value) => {
-        if (value.length < 1) {
-          return t("loginForm.errors.required");
-        } else {
-          return null;
-        }
-      },
-      email: (value) => {
-        if (value) {
-          if (!/^\S+@\S+$/.test(value)) {
-            return t("form.validate.email");
-          } else {
-            return null;
-          }
-        } else {
-          return t("loginForm.errors.required");
-        }
-      },
-      // password: (value) => {
-      //   if (!value) {
-      //     return t("loginForm.errors.required");
-      //   }
-      //   if (value.length < 8) {
-      //     return t("loginForm.errors.length");
-      //   }
-      //   return null;
-      // },
       phone: (value) => {
         if (!value) {
           return t("loginForm.errors.required");
@@ -79,19 +67,19 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
     form.reset();
     setErr("");
     onClose();
-    setSuccess(false);
     setEmail("");
+    setSuccess(false);
   };
 
-  const onSubmit = async (values: RegisterDto) => {
+  const onSubmit = async (values: ResetPassDto) => {
     setIsLoading(true);
     try {
-      const response = await register(values);
+      const response = await resetPass(values);
       setEmail(response?.data?.email);
-      // closeModal();
       setSuccess(true);
       setErr('')
     } catch (e: any) {
+      console.error(e);
       setErr(e.response.data?.message);
     } finally {
       setIsLoading(false);
@@ -102,9 +90,11 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
     <CustomModal
       opened={opened}
       onClose={closeModal}
-      title="Регистрация"
+      title="Восстановление пароля"
+      withCloseButton={false}
       fz={24}
     >
+      <LoadingBlock isLoading={isLoading} />
       {err ? (
         <Alert
           icon={<IconAlertCircleFilled size="1rem" />}
@@ -116,23 +106,7 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
         </Alert>
       ) : null}
       {!success ? (
-        <form
-          onSubmit={form.onSubmit((values) => {
-            onSubmit(values);
-          })}
-        >
-          <TextInput
-            label={t("loginForm.fio")}
-            placeholder="Введите ваше полное имя"
-            {...form.getInputProps("name")}
-            withAsterisk
-          />
-          <TextInput
-            label={t("loginForm.email")}
-            placeholder={t("loginForm.enterEmail")}
-            {...form.getInputProps("email")}
-            withAsterisk
-          />
+        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
           <InputBase
             label={t("loginForm.phone")}
             {...form.getInputProps("phone")}
@@ -144,27 +118,21 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
             mask="+7 (000) 000-0000"
             withAsterisk
           />
-          {/* <PasswordInput
-          label={t("loginForm.password.label")}
-          placeholder={t("loginForm.password.placeholder")}
-          mt="md"
-          withAsterisk
-          {...form.getInputProps("password")}
-        /> */}
           <Button
             fullWidth
-            type="submit"
             variant="outline"
-            style={{ border: "1px solid #2DBE61", color: "#2DBE61" }}
+            type="submit"
             mt="md"
+            style={{ border: "1px solid #2DBE61", color: "#2DBE61" }}
           >
-            Подать заявку
+            Продолжить
           </Button>
         </form>
       ) : (
         <div>
           <Text>
-            Мы отправили письмо с ссылкой для подтверждения на почту {email}.<br />
+            Мы отправили письмо с ссылкой для подтверждения на почту {email}.
+            <br />
             Пожалуйста, перейдите по ссылке в письме, чтобы завершить
             регистрацию.
           </Text>
@@ -179,7 +147,6 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
           </Button>
         </div>
       )}
-      <LoadingBlock isLoading={isLoading} />
     </CustomModal>
   );
-}
+};

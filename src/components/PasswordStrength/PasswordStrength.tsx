@@ -40,9 +40,11 @@ function PasswordRequirement({
 
 export function PasswordStrength({ onPasswordChange }: PasswordStrengthProps) {
   const { t } = useTranslation(["translation", "auth"]);
-  const passwordRequirements = getPasswordRequirements(t);
+  const passwordRequirements = getPasswordRequirements();
+  // const passwordRequirements = getPasswordRequirements(t);
   const [value, setValue] = useInputState("");
-  const strength = getStrength(value, t);
+  const strength = getStrength(value);
+  // const strength = getStrength(value, t);
   const checks = passwordRequirements.map((requirement, index) => (
     <PasswordRequirement
       key={index}
@@ -50,6 +52,7 @@ export function PasswordStrength({ onPasswordChange }: PasswordStrengthProps) {
       meets={requirement.re.test(value)}
     />
   ));
+
   const bars = Array(7)
     .fill(0)
     .map((_, index) => (
@@ -85,6 +88,7 @@ export function PasswordStrength({ onPasswordChange }: PasswordStrengthProps) {
       </Group>
       {strength !== 100 ? (
         <>
+          <Text color="dimmed">Пароль может содержать лишь:</Text>
           <PasswordRequirement
             label={t("auth:loginForm.password.errors.length")}
             meets={value.length > 5}

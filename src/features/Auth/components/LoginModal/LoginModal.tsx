@@ -3,11 +3,19 @@ import { LoadingBlock } from "@/components/LoadingBlock";
 import { getUserInfo, login } from "@/core/api";
 import { LoginDto } from "@/core/types";
 import { setLogin, setUser } from "@/slice/userSlice";
-import { Alert, Button, Flex, PasswordInput, TextInput } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Flex,
+  InputBase,
+  PasswordInput,
+  Text,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconAlertCircleFilled } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { IMaskInput } from "react-imask";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -15,29 +23,35 @@ interface LoginModalProps {
   opened: boolean;
   onClose: () => void;
   openRegister: () => void;
+  openRecover: () => void;
 }
 
-export function LoginModal({ opened, onClose, openRegister }: LoginModalProps) {
+export function LoginModal({
+  opened,
+  onClose,
+  openRegister,
+  openRecover,
+}: LoginModalProps) {
   const { t } = useTranslation("auth");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState("");
 
   const form = useForm({
     initialValues: {
-      email: "",
+      phone: "",
       password: "",
     },
 
     validate: {
-      email: (value) => {
-        if (value) {
-          if (!/^\S+@\S+$/.test(value)) {
-            return t("loginForm.errors.email");
-          } else {
-            return null;
-          }
+      phone: (value) => {
+        if (!value) {
+          return t("loginForm.errors.required");
+        } else if (value && !/^\+7 \(\d{3}\) \d{3}-\d{4}$/.test(value)) {
+          return 'Неверный формат номера телефона';
+        } else {
+          return null;
         }
       },
       password: (value) => {
@@ -54,9 +68,15 @@ export function LoginModal({ opened, onClose, openRegister }: LoginModalProps) {
 
   const closeModal = () => {
     form.reset();
-    setErr(false);
+    setErr("");
     onClose();
-    navigate('/app');
+  };
+
+  const handleNumber = (value: string) => {
+    form.setFieldValue("phone", value);
+    if (value?.length <= 4) {
+      form.setFieldValue("phone", "");
+    }
   };
 
   const onSubmit = async (values: LoginDto) => {
@@ -68,20 +88,17 @@ export function LoginModal({ opened, onClose, openRegister }: LoginModalProps) {
       dispatch(setLogin());
       dispatch(setUser(user));
       closeModal();
+      navigate("app");
     } catch (e: any) {
-      setErr(true);
+      setErr(e.response?.data?.message);
     } finally {
       setIsLoading(false);
     }
   };
+  console.log(err)
 
   return (
-    <CustomModal
-      opened={opened}
-      onClose={onClose}
-      title={t("loginPageTitle")}
-      fz={24}
-    >
+    <CustomModal opened={opened} onClose={closeModal} title="Войти" fz={24}>
       {err ? (
         <Alert
           icon={<IconAlertCircleFilled size="1rem" />}
@@ -89,7 +106,7 @@ export function LoginModal({ opened, onClose, openRegister }: LoginModalProps) {
           color="red"
           mb="lg"
         >
-          {t("loginForm.errors.invalidCredentials")}
+          {err}
         </Alert>
       ) : null}
       <form
@@ -97,11 +114,16 @@ export function LoginModal({ opened, onClose, openRegister }: LoginModalProps) {
           onSubmit(values);
         })}
       >
-        <TextInput
-          label={t("loginForm.email")}
-          placeholder={t("loginForm.enterEmail")}
+        <InputBase
+          label={t("loginForm.phone")}
+          {...form.getInputProps("phone")}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleNumber(e.target.value)
+          }
+          component={IMaskInput}
+          placeholder="+7 (XXX) XXX-XXXX"
+          mask="+7 (000) 000-0000"
           withAsterisk
-          {...form.getInputProps("email")}
         />
         <PasswordInput
           label={t("loginForm.password.label")}
@@ -110,12 +132,39 @@ export function LoginModal({ opened, onClose, openRegister }: LoginModalProps) {
           withAsterisk
           {...form.getInputProps("password")}
         />
+        <Flex align="center" my={5} gap={5}>
+          <Button
+            variant="subtle"
+            p={0}
+            onClick={() => {
+              closeModal();
+              openRecover();
+            }}
+          >
+            Восстановить пароль
+          </Button>
+        </Flex>
         <Flex justify="flex-end" gap={10}>
-          <Button type="submit" mt="md" style={{ backgroundColor: "#2DBE61" }}>
+          <Button
+            fullWidth
+            variant="outline"
+            type="submit"
+            mt="md"
+            style={{ border: "1px solid #2DBE61", color: "#2DBE61" }}
+          >
             {t("loginForm.submitButton")}
           </Button>
-          <Button variant="default" mt="md" onClick={() => openRegister()}>
-            {t("loginForm.register")}
+        </Flex>
+        <Flex align="center" my={5} gap={5}>
+          <Text>Еще нет аккаунта?</Text>
+          <Button
+            variant="subtle"
+            onClick={() => {
+              onClose();
+              openRegister();
+            }}
+          >
+            Регистрация
           </Button>
         </Flex>
       </form>

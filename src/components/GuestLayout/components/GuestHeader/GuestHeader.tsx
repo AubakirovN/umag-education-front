@@ -1,16 +1,30 @@
 import { Box, Button, Flex, TextInput } from "@mantine/core";
 // import { useStyles } from "./styles.ts";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher/LanguageSwitcher.tsx";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
 import { IconSearch } from "@tabler/icons-react";
 import { LoginModal } from "@/features/Auth/components/LoginModal";
 import { useState } from "react";
 import { RegisterModal } from "@/features/Auth/components/RegisterModal";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { closeLoginModal, openLoginModal } from "@/slice/userSlice";
+import { RecoverModal } from "@/features/Auth/components/RecoverModal";
 
 export function GuestHeader() {
   // const { classes } = useStyles();
-  const [loginModal, setLoginModal] = useState(false);
+  // const [loginModal, setLoginModal] = useState(false);
+  const dispatch = useDispatch();
+  const {loginModal} = useSelector((state: RootState) => state.user);
   const [registerModal, setRegisterModal] = useState(false);
+  const [recoverModal, setRecoverModal] = useState(false);
+
+  const closeLogin= () => {
+    dispatch(closeLoginModal())
+  };
+  const openLogin = () => {
+    dispatch(openLoginModal())
+
+  }
 
   return (
     <Box mb={20} p={20}>
@@ -42,13 +56,13 @@ export function GuestHeader() {
             >
               Топ специалистов
             </Button>
-            <LanguageSwitcher />
+            {/* <LanguageSwitcher /> */}
             <Button
               variant="subtle"
               style={{ color: "black" }}
               radius={20}
               fz={16}
-              onClick={() => setLoginModal(true)}
+              onClick={() => openLogin()}
             >
               Вход
             </Button>
@@ -68,19 +82,18 @@ export function GuestHeader() {
       </Flex>
       <LoginModal
         opened={loginModal}
-        onClose={() => setLoginModal(false)}
-        openRegister={() => {
-          setLoginModal(false);
-          setRegisterModal(true);
-        }}
+        onClose={() => closeLogin()}
+        openRegister={() => setRegisterModal(true)}
+        openRecover={() => setRecoverModal(true)}
       />
       <RegisterModal
         opened={registerModal}
         onClose={() => setRegisterModal(false)}
-        openLogin={() => {
-          setRegisterModal(false);
-          setLoginModal(true);
-        }}
+      />
+      <RecoverModal
+        opened={recoverModal}
+        onClose={() => setRecoverModal(false)}
+        openLogin={() => dispatch(openLoginModal())}
       />
     </Box>
   );

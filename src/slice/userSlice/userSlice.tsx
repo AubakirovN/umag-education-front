@@ -4,6 +4,7 @@ import { resetAll } from "../resetAction";
 interface UserState {
   currentUser: any;
   isAuthenticated: boolean;
+  loginModal: boolean;
 }
 
 const initialState: UserState = {
@@ -19,6 +20,7 @@ const initialState: UserState = {
     status: "",
   },
   isAuthenticated: false,
+  loginModal: false,
 };
 
 const userSlice = createSlice({
@@ -31,8 +33,11 @@ const userSlice = createSlice({
     setLogin: (state) => {
       state.isAuthenticated = true;
     },
-    setLogout: (state) => {
-      state.isAuthenticated = false;
+    openLoginModal: (state) => {
+      state.loginModal = true;
+    },
+    closeLoginModal: (state) => {
+      state.loginModal = false;
     },
     resetUser: () => initialState,
   },
@@ -41,5 +46,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, setLogin, setLogout, resetUser } = userSlice.actions;
+export const { setUser, setLogin, openLoginModal, closeLoginModal, resetUser } =
+  userSlice.actions;
 export default userSlice.reducer;

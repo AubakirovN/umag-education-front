@@ -1,7 +1,6 @@
 import React, { useEffect, ReactNode } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import { notifications } from "@mantine/notifications";
 
 interface HttpInterceptorProps {
   children: ReactNode;
@@ -31,45 +30,6 @@ export const HttpInterceptor: React.FC<HttpInterceptorProps> = ({
         return response;
       },
       (error) => {
-        if (error.response?.status === 403) {
-          // window.location.pathname = `/app/home`;
-          // return Promise.reject(error);
-        } else if (
-          // error.response?.status === 4040 ||
-          error.response?.status === 400
-        ) {
-          notifications.show({
-            title: `${t("errors.errorCode")} ${error.response?.status}.`,
-            message: error.response?.data?.error?.message,
-            color: "red",
-          });
-          return Promise.reject(error);
-        } else if (
-          error.response?.status === 500 ||
-          error.response?.status === 502 ||
-          error.response?.status === 503
-        ) {
-          notifications.show({
-            title: `${t("errors.errorCode")} ${error.response?.status}.`,
-            message: t("errors.text50X"),
-            color: "red",
-          });
-          return Promise.reject(error);
-        } else if (error.response?.status === 504) {
-          notifications.show({
-            title: `${t("errors.errorCode")} ${error.response?.status}.`,
-            message: t("errors.text504"),
-            color: "red",
-          });
-          return Promise.reject(error);
-        } else if (error.response?.status === 422) {
-          notifications.show({
-            title: `${t("errors.errorCode")} ${error.response?.status}.`,
-            message: error.response?.data?.message,
-            color: "red",
-          });
-        }
-
         return Promise.reject(error);
       }
     );

@@ -1,12 +1,20 @@
 
 export type LoginDto = {
-  email: string;
+  phone: string;
   password: string;
 };
 export type RegisterDto = {
   name: string;
   email: string;
-  password: string;
+  // password: string;
+  // role: string;
+  phone: string;
+};
+export type ConfirmPassDto = {
+  register_token: string
+  password: string
+};
+export type ResetPassDto = {
   phone: string;
 };
 export type AddUserDto = {

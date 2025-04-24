@@ -1,11 +1,21 @@
-import { Box, Button, Flex, TextInput } from "@mantine/core";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher/LanguageSwitcher.tsx";
+import { Box, Button, Flex, Menu, TextInput } from "@mantine/core";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
-import { IconSearch } from "@tabler/icons-react";
+import { IconDoorExit, IconSearch, IconSettings } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { resetAll } from "@/slice/resetAction";
+import { RootState } from "@/store";
 
 export function AppHeader() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.user.currentUser);
+
+  const logout = () => {
+    localStorage.removeItem('accessToken');
+    dispatch(resetAll());
+  };
 
   return (
     <Box mb={20} p={20}>
@@ -36,18 +46,39 @@ export function AppHeader() {
             >
               Топ специалистов
             </Button>
-            <LanguageSwitcher />
-            <Button
-              sx={{
-                backgroundColor: "#FFAE1F",
-                "&:hover": { backgroundColor: "#fff", color: "#000" },
-              }}
-              fz={16}
-              radius={20}
-              onClick={() => navigate("/app/profile")}
-            >
-              Личный кабинет
-            </Button>
+            {/* <LanguageSwitcher /> */}
+            <Menu shadow="md" width={200}>
+              <Menu.Target>
+                <Button
+                  sx={{
+                    backgroundColor: "#FFAE1F",
+                    "&:hover": { backgroundColor: "#fff", color: "#000" },
+                  }}
+                  fz={16}
+                  radius={20}
+                >
+                  Личный кабинет
+                </Button>
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                <Menu.Label>{user?.email}</Menu.Label>
+                <Menu.Item
+                  icon={<IconSettings size={14} />}
+                  onClick={() => navigate("/app/profile")}
+                >
+                  Профиль
+                </Menu.Item>
+                <Menu.Divider />
+                <Menu.Item
+                  color="red"
+                  icon={<IconDoorExit size={14} />}
+                  onClick={logout}
+                >
+                  Выход
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
           </Flex>
         </Flex>
       </Flex>

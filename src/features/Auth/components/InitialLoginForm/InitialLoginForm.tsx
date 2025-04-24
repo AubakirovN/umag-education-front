@@ -28,7 +28,8 @@ export function InitialLoginForm({ onSubmit, back }: any) {
         if (!value) {
           return t("loginForm.password.errors.required");
         }
-        const strength = getStrength(value, t);
+        const strength = getStrength(value);
+        // const strength = getStrength(value, t);
         if (strength < 100) {
           return t("loginForm.password.errors.strength");
         }

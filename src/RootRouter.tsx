@@ -10,6 +10,8 @@ import { ErrorPage } from "./features/Error/pages";
 import { CoursePage } from "./features/Landing/pages/CoursePage/CoursePage.tsx";
 import { AppLayout } from "./components/AppLayout/AppLayout.tsx";
 import { ClientCoursePage } from "./features/Landing/pages/ClientCoursePage/ClientCoursePage.tsx";
+import { ConfirmPage } from "./features/Auth/pages/ConfirmPage/ConfirmPage.tsx";
+import { ResetPage } from "./features/Auth/pages/ResetPage/ResetPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,8 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <LandingPage /> },
       { path: "/courses/:id", element: <CoursePage /> },
+      { path: "/confirm-email/:id", element: <ConfirmPage /> },
+      { path: "/reset-password/:id", element: <ResetPage /> },
     ],
   },
   {
