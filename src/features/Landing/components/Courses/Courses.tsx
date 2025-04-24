@@ -99,7 +99,7 @@ export const Courses = () => {
                 </Flex>
                 <Group>
                   <Badge color="orange" variant="outline" fz={12}>
-                    {course?.tag}
+                    {course?.roles?.[0]?.name}
                   </Badge>
                 </Group>
               </Flex>

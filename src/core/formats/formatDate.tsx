@@ -35,3 +35,7 @@ export const getYear = (date: string) => {
   const parsedDate = parseISO(date);
   return format(parsedDate, "yyyy");
 };
+export const formatDateTimeHM = (dateTime: string | Date) => {
+  const dateTimeObj = new Date(dateTime);
+  return format(dateTimeObj, 'HH:mm');
+};

@@ -22,13 +22,13 @@ export const CourseMain = ({ course }: any) => {
                 <b>Описание:</b> {course?.description}
               </Text>
               <Text fz={14}>
-                <b>Тест:</b> {course?.test}
+                <b>Тест:</b> Mock Данный курс содержит 2 теста
               </Text>
               <Text fz={14}>
-                <b>Продолжительность обучения:</b> {course?.duration}
+                <b>Продолжительность обучения:</b> {course?.deadline ? course?.deadline: "-"}
               </Text>
               <Text fz={14}>
-                <b>Сертификат:</b> {course?.cert}
+                <b>Сертификат:</b> После окончания курса выдается индивидуальный сертификат
               </Text>
             </Flex>
             <Flex>
