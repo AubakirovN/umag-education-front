@@ -93,7 +93,7 @@ export function GuestHeader() {
       <RecoverModal
         opened={recoverModal}
         onClose={() => setRecoverModal(false)}
-        openLogin={() => dispatch(openLoginModal())}
+        // openLogin={() => dispatch(openLoginModal())}
       />
     </Box>
   );

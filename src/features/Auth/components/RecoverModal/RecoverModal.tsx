@@ -1,15 +1,11 @@
 import { CustomModal } from "@/components/CustomModal";
 import { LoadingBlock } from "@/components/LoadingBlock";
-import { PasswordStrength, getStrength } from "@/components/PasswordStrength";
-import { confirmPass, resetPass } from "@/core/api";
+import { resetPass } from "@/core/api";
 import { ResetPassDto } from "@/core/types";
-import { openLoginModal } from "@/slice/userSlice";
 import {
   Alert,
   Button,
   InputBase,
-  LoadingOverlay,
-  PasswordInput,
   Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -17,19 +13,15 @@ import { IconAlertCircleFilled } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IMaskInput } from "react-imask";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 interface RecoverModalProps {
   opened: boolean;
   onClose: () => void;
-  openLogin: () => void;
 }
 
 export const RecoverModal = ({
   opened,
   onClose,
-  openLogin,
 }: RecoverModalProps) => {
   const { t } = useTranslation("auth");
 

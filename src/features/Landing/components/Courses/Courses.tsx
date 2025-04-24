@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MRT_PaginationState } from "mantine-react-table";
 import { getCourses } from "@/core/api/courseApi";
 
