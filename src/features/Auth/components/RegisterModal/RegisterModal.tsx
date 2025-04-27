@@ -1,6 +1,6 @@
 import { CustomModal } from "@/components/CustomModal";
 import { LoadingBlock } from "@/components/LoadingBlock";
-import { register } from "@/core/api";
+import { getUserRole, register } from "@/core/api";
 import { RegisterDto } from "@/core/types";
 import { Alert, Button, InputBase, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -17,6 +17,7 @@ interface RegisterModalProps {
 export function RegisterModal({ opened, onClose }: RegisterModalProps) {
   const { t } = useTranslation("auth");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [success, setSuccess] = useState(false);
   const [err, setErr] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -60,7 +61,7 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
         if (!value) {
           return t("loginForm.errors.required");
         } else if (value && !/^\+7 \(\d{3}\) \d{3}-\d{4}$/.test(value)) {
-          return 'Неверный формат номера телефона';
+          return "Неверный формат номера телефона";
         } else {
           return null;
         }
@@ -90,7 +91,7 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
       setEmail(response?.data?.email);
       // closeModal();
       setSuccess(true);
-      setErr('')
+      setErr("");
     } catch (e: any) {
       setErr(e.response.data?.message);
     } finally {
@@ -136,14 +137,25 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
           <InputBase
             label={t("loginForm.phone")}
             {...form.getInputProps("phone")}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleNumber(e.target.value)
-            }
+            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+              setErr("");
+              setRole("");
+              handleNumber(e.target.value);
+              if (e.target.value?.length === 17) {
+                try {
+                  const response = await getUserRole({ phone: e.target.value });
+                  setRole(response?.data?.role_name);
+                } catch (e: any) {
+                  setErr(e.response.data?.message);
+                }
+              }
+            }}
             component={IMaskInput}
             placeholder="+7 (XXX) XXX-XXXX"
             mask="+7 (000) 000-0000"
             withAsterisk
           />
+          <TextInput value={role} disabled label="Роль" withAsterisk />
           {/* <PasswordInput
           label={t("loginForm.password.label")}
           placeholder={t("loginForm.password.placeholder")}
@@ -152,10 +164,14 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
           {...form.getInputProps("password")}
         /> */}
           <Button
+            disabled={!role}
             fullWidth
             type="submit"
             variant="outline"
-            style={{ border: "1px solid #2DBE61", color: "#2DBE61" }}
+            style={{
+              border: role ? "1px solid #2DBE61" : "1px solid #ccc",
+              color: role ? "#2DBE61" : "gray",
+            }}
             mt="md"
           >
             Подать заявку
@@ -164,7 +180,8 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
       ) : (
         <div>
           <Text>
-            Мы отправили письмо с ссылкой для подтверждения на почту {email}.<br />
+            Мы отправили письмо с ссылкой для подтверждения на почту {email}.
+            <br />
             Пожалуйста, перейдите по ссылке в письме, чтобы завершить
             регистрацию.
           </Text>

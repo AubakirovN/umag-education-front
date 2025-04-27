@@ -95,7 +95,6 @@ export function LoginModal({
       setIsLoading(false);
     }
   };
-  console.log(err)
 
   return (
     <CustomModal opened={opened} onClose={closeModal} title="Войти" fz={24}>

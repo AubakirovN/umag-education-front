@@ -54,8 +54,6 @@ export const Courses = () => {
     getData();
   }, [pagination.pageIndex])
 
-  console.log(courses);
-
   return (
     <>
       {/* <CourseSearcher /> */}
