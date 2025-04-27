@@ -17,10 +17,12 @@ export const Course = () => {
     getData();
   }, []);
 
+console.log(course);
+
   return (
     <>
       <CourseMain course={course} />
-      <CourseProgram />
+      <CourseProgram course={course}/>
     </>
   );
 };

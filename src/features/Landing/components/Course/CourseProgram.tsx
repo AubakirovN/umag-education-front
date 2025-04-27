@@ -8,7 +8,7 @@ const coursePrograms = [
   { id: 4, block: 4, title: "Повышение квалификации" },
 ];
 
-export const CourseProgram = () => {
+export const CourseProgram = ({ course }: any) => {
   return (
     <Flex direction="column">
       <Title my={20}>Программа курса</Title>
@@ -23,9 +23,9 @@ export const CourseProgram = () => {
         }}
       >
         <Flex direction="column">
-          {coursePrograms?.map((item, key) => (
+          {course?.course_blocks.map((item, key) => (
             <Text key={key} fw={500}>
-              <span style={{ color: "#2DBE61" }}>Блок {item.block}</span>{" "}
+              <span style={{ color: "#2DBE61" }}>Блок {item.number}</span>{" "}
               {item.title}
             </Text>
           ))}
