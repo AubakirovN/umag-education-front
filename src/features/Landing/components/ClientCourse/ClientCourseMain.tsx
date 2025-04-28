@@ -31,7 +31,7 @@ export const ClientCourseMain = ({ course }: any) => {
         </Grid.Col>
         <Grid.Col span={5} className={styles.courseImage}>
           <Badge color="orange" variant="outline" fz={12}>
-            {course?.roles?.[0]?.role_name}
+            {course?.roles?.[0]?.name}
           </Badge>
         </Grid.Col>
       </Grid>
