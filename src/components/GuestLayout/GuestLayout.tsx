@@ -1,5 +1,4 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { Container } from "@mantine/core";
 import { GuestHeader } from "./components/GuestHeader";
 import { Footer } from "../Footer";
 import { useSelector } from "react-redux";
@@ -17,12 +16,12 @@ export function GuestLayout() {
   }, [isAuth]);
 
   return (
-    <>
+    <div className="wrapper">
       <GuestHeader />
-      <Container size="xl">
+      <div className="main">
         <Outlet />
-      </Container>
+      </div>
       <Footer />
-    </>
+    </div>
   );
 }

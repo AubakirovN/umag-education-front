@@ -15,7 +15,11 @@ import { useNavigate } from "react-router-dom";
 import { MRT_PaginationState } from "mantine-react-table";
 import { getCourses } from "@/core/api/courseApi";
 
-export const Courses = () => {
+interface CoursesProps {
+  chosenRole: string;
+}
+
+export const Courses = ({ chosenRole }: CoursesProps) => {
   const navigate = useNavigate();
   const isAuth = useSelector((state: RootState) => state.user.isAuthenticated);
   const [courses, setCourses] = useState<any>([]);
@@ -29,19 +33,24 @@ export const Courses = () => {
   const showMore = () => {
     setPagination((prev) => ({
       ...prev,
-      pageIndex: prev.pageIndex + 1
-    }))
+      pageIndex: prev.pageIndex + 1,
+    }));
   };
 
-  const getData = async () => {
+  const getData = async (isNewRole = false) => {
     setIsLoading(true);
     const params = {
       page: pagination.pageIndex + 1,
       perPage: pagination.pageSize,
+      role_id: chosenRole,
     };
     try {
       const response = await getCourses(params);
-      setCourses((prev: any) => ([...prev, ...response?.data]));
+      if (isNewRole) {
+        setCourses(response?.data);
+      } else {
+        setCourses((prev: any) => [...prev, ...response?.data]);
+      }
       setTotalRowCount(response?.total);
     } catch (e) {
       console.error(e);
@@ -51,59 +60,67 @@ export const Courses = () => {
   };
 
   useEffect(() => {
-    getData();
-  }, [pagination.pageIndex])
+    getData(true);
+  }, [chosenRole]);
+  useEffect(() => {
+    if (pagination.pageIndex !== 0) {
+      getData();
+    }
+  }, [pagination.pageIndex]);
 
   return (
     <>
       {/* <CourseSearcher /> */}
       <Grid mt={5}>
         <LoadingOverlay visible={isLoading} overlayBlur={2} />
-        {data?.slice(0, pagination.pageSize)?.map((course: any, index: number) => (
-          <Grid.Col span={4} key={index} h="300px">
-            <Card
-              shadow="sm"
-              padding="lg"
-              radius="md"
-              withBorder
-              h="100%"
-              pos="relative"
-              onClick={() =>
-                navigate(
-                  !isAuth
-                    ? `/courses/${course?.id}`
-                    : `/app/courses/${course?.id}`
-                )
-              }
-              sx={{
-                cursor: "pointer",
-                backgroundImage: `url('/img/customer.png')`,
-                backgroundSize: "160px 160px",
-                backgroundPosition: "bottom right",
-                backgroundRepeat: "no-repeat",
-                "&:hover": {
-                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-                },
-              }}
-            >
-              <Flex direction="column" justify="space-between" h="100%">
-                <Flex direction="column">
-                  <Text weight={500} fz={24} lh="100%">
-                    {course?.title}
-                  </Text>
-                  <Text fz={14} color="dimmed">
-                    {course?.count_course_blocks} блока {course?.count_lessons} уроков
-                  </Text>
+        {data
+          ?.slice(0, pagination.pageSize)
+          ?.map((course: any, index: number) => (
+            <Grid.Col span={4} key={index} h="300px">
+              <Card
+                shadow="sm"
+                padding="lg"
+                radius="md"
+                withBorder
+                h="100%"
+                pos="relative"
+                onClick={() =>
+                  navigate(
+                    !isAuth
+                      ? `/courses/${course?.id}`
+                      : `/app/courses/${course?.id}`
+                  )
+                }
+                sx={{
+                  cursor: "pointer",
+                  backgroundImage: `url('/img/customer.png')`,
+                  backgroundSize: "160px 160px",
+                  backgroundPosition: "bottom right",
+                  backgroundRepeat: "no-repeat",
+                  "&:hover": {
+                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+                  },
+                }}
+              >
+                <Flex direction="column" justify="space-between" h="100%">
+                  <Flex direction="column">
+                    <Text weight={500} fz={24} lh="100%">
+                      {course?.title}
+                    </Text>
+                    <Text fz={14} color="dimmed">
+                      {course?.count_lessons} уроков{" "}
+                      {course?.count_course_blocks} блока
+                    </Text>
+                  </Flex>
+                  <Group>
+                    <Badge color="orange" variant="outline" fz={12}>
+                      {course?.roles?.[0]?.name}
+                    </Badge>
+                  </Group>
                 </Flex>
-                <Group>
-                  <Badge color="orange" variant="outline" fz={12}>
-                    {course?.roles?.[0]?.name}
-                  </Badge>
-                </Group>
-              </Flex>
-            </Card>
-          </Grid.Col>
-        ))}
+              </Card>
+            </Grid.Col>
+          ))}
       </Grid>
       {data?.length < totalRowCount && (
         <Flex justify="center" mt={20}>

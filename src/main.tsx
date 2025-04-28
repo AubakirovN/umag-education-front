@@ -10,7 +10,7 @@ import "./i18n";
 import HttpInterceptor from "./HttpInterceptor";
 import { persistor, store } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
-import "./styles/App.scss";
+import "./styles/App.css";
 
 const queryClient = new QueryClient();
 
@@ -18,7 +18,12 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <HttpInterceptor>
       <QueryClientProvider client={queryClient}>
-        <MantineProvider withCSSVariables withGlobalStyles withNormalizeCSS>
+        <MantineProvider
+          withCSSVariables
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{ fontFamily: "Geologica, sans-serif" }}
+        >
           <Notifications />
           <Suspense>
             <Provider store={store}>

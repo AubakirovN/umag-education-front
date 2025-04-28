@@ -18,18 +18,11 @@ export const CourseMain = ({ course }: any) => {
           <Flex direction="column" justify="space-between" h="100%">
             <Flex direction="column">
               <Title>{course?.title}</Title>
-              <Text fz={14} my={20}>
-                <b>Описание:</b> {course?.description}
-              </Text>
-              <Text fz={14}>
-                <b>Тест:</b> Mock Данный курс содержит 2 теста
-              </Text>
-              <Text fz={14}>
-                <b>Продолжительность обучения:</b> {course?.deadline ? course?.deadline: "-"}
-              </Text>
-              <Text fz={14}>
-                <b>Сертификат:</b> После окончания курса выдается индивидуальный сертификат
-              </Text>
+              <Text
+                fz={14}
+                my={20}
+                dangerouslySetInnerHTML={{ __html: course?.description }}
+              />
             </Flex>
             <Flex>
               <a className={styles.courseButton}>Начать курс</a>
@@ -38,7 +31,7 @@ export const CourseMain = ({ course }: any) => {
         </Grid.Col>
         <Grid.Col span={5} className={styles.courseImage}>
           <Badge color="orange" variant="outline" fz={12}>
-            {course?.tag}
+            {course?.roles?.[0]?.role_name}
           </Badge>
         </Grid.Col>
       </Grid>

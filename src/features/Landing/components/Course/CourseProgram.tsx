@@ -1,12 +1,5 @@
-import { Card, Flex, Text, Title } from "@mantine/core";
+import { Card, Flex, Grid, Text, Title } from "@mantine/core";
 import styles from "./Course.module.css";
-
-const coursePrograms = [
-  { id: 1, block: 1, title: "Знакомство с программой" },
-  { id: 2, block: 2, title: "Оборудование" },
-  { id: 3, block: 3, title: "Техническая поддержка" },
-  { id: 4, block: 4, title: "Повышение квалификации" },
-];
 
 export const CourseProgram = ({ course }: any) => {
   return (
@@ -23,11 +16,20 @@ export const CourseProgram = ({ course }: any) => {
         }}
       >
         <Flex direction="column">
-          {course?.course_blocks.map((item, key) => (
-            <Text key={key} fw={500}>
-              <span style={{ color: "#2DBE61" }}>Блок {item.number}</span>{" "}
-              {item.title}
-            </Text>
+          {course?.course_blocks?.sort((a:any,b:any) => a.number - b.number)?.map((item: any, key: any) => (
+            <Grid key={key}>
+              <Grid.Col span={3}>
+                <span style={{ color: "#2DBE61" }}>Блок {item.number}</span>{" "}
+              </Grid.Col>
+              <Grid.Col span={9}>
+                <Flex direction="column">
+                  <Text fw={500}>{item.title}</Text>
+                  <Text
+                    dangerouslySetInnerHTML={{ __html: item?.description }}
+                  />
+                </Flex>
+              </Grid.Col>
+            </Grid>
           ))}
         </Flex>
       </Card>

@@ -1,12 +1,16 @@
 import { Box, Chip, Group } from "@mantine/core";
 import "./CourseTags.css";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { getRoles } from "@/core/api/courseApi";
 import { MRT_PaginationState } from "mantine-react-table";
 
-export function CourseTags() {
+interface CourseRolesProps {
+  chosenRole: string;
+  setChosenRole: React.Dispatch<SetStateAction<string>>;
+}
+
+export function CourseRoles({ chosenRole, setChosenRole }: CourseRolesProps) {
   const [roles, setRoles] = useState([]);
-  const [chosenTag, setChosenTag] = useState<any>("");
   const [pagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
     pageSize: 100,
@@ -31,10 +35,13 @@ export function CourseTags() {
   return (
     <>
       <Box my={10}>
-        <Chip.Group value={chosenTag} onChange={(val) => setChosenTag(val)}>
+        <Chip.Group
+          value={chosenRole}
+          onChange={(val: string) => setChosenRole(val)}
+        >
           <Group spacing="xs">
             <Chip
-              checked={!chosenTag}
+              checked={!chosenRole}
               key="all"
               variant="filled"
               styles={{
@@ -60,7 +67,7 @@ export function CourseTags() {
             {roles?.map((role: any, index: number) => (
               <Chip
                 key={index}
-                checked={Number(chosenTag) === Number(role?.id)}
+                checked={Number(chosenRole) === Number(role?.id)}
                 variant="filled"
                 styles={{
                   iconWrapper: { display: "none" },

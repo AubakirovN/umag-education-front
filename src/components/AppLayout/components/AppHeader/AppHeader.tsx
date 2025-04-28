@@ -1,13 +1,11 @@
 import { Box, Button, Flex, Menu, TextInput } from "@mantine/core";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
-import { IconDoorExit, IconSearch, IconSettings } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import { IconDoorExit, IconSearch } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { resetAll } from "@/slice/resetAction";
 import { RootState } from "@/store";
 
 export function AppHeader() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -63,13 +61,13 @@ export function AppHeader() {
 
               <Menu.Dropdown>
                 <Menu.Label>{user?.email}</Menu.Label>
-                <Menu.Item
+                {/* <Menu.Item
                   icon={<IconSettings size={14} />}
                   onClick={() => navigate("/app/profile")}
                 >
                   Профиль
                 </Menu.Item>
-                <Menu.Divider />
+                <Menu.Divider /> */}
                 <Menu.Item
                   color="red"
                   icon={<IconDoorExit size={14} />}

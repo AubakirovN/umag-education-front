@@ -2,6 +2,7 @@ import { CustomModal } from "@/components/CustomModal";
 import { LoadingBlock } from "@/components/LoadingBlock";
 import { PasswordStrength, getStrength } from "@/components/PasswordStrength";
 import { resetPass } from "@/core/api";
+import { CourseRoles } from "@/features/Landing/components/CourseTags";
 import { Courses } from "@/features/Landing/components/Courses";
 import { openLoginModal } from "@/slice/userSlice";
 import { Alert, Button, PasswordInput } from "@mantine/core";
@@ -18,6 +19,7 @@ export const ResetPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [chosenRole, setChosenRole] = useState("");
   const [opened, setOpened] = useState(true);
   const [err, setErr] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -79,7 +81,8 @@ export const ResetPage = () => {
 
   return (
     <>
-      <Courses />
+      <CourseRoles chosenRole={chosenRole} setChosenRole={setChosenRole} />
+      <Courses chosenRole={chosenRole} />
       <CustomModal
         opened={opened}
         onClose={onClose}
