@@ -59,6 +59,24 @@ export const Courses = ({ chosenRole }: CoursesProps) => {
     }
   };
 
+  const getImg = (id: string) => {
+    if (Number(id) === 43) {
+      return "img/partner.png";
+    } else if (Number(id) === 44) {
+      return "img/customer.png";
+    } else if (Number(id) === 45) {
+      return "img/sale.png";
+    } else if (Number(id) === 46) {
+      return "img/hr.png";
+    } else if (Number(id) === 47) {
+      return "img/shop.png";
+    } else if (Number(id) === 48) {
+      return "img/cashier.png";
+    } else {
+      return "img/customer.png";
+    }
+  };
+
   useEffect(() => {
     getData(true);
   }, [chosenRole]);
@@ -93,7 +111,7 @@ export const Courses = ({ chosenRole }: CoursesProps) => {
                 }
                 sx={{
                   cursor: "pointer",
-                  backgroundImage: `url('/img/customer.png')`,
+                  backgroundImage: `url(${getImg(course?.id)})`,
                   backgroundSize: "160px 160px",
                   backgroundPosition: "bottom right",
                   backgroundRepeat: "no-repeat",
