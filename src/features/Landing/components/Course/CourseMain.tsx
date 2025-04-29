@@ -25,7 +25,7 @@ export const CourseMain = ({ course }: any) => {
               />
             </Flex>
             <Flex>
-              <a className={styles.courseButton}>Начать курс</a>
+              <span className={styles.courseButton}>Начать курс</span>
             </Flex>
           </Flex>
         </Grid.Col>

@@ -12,9 +12,13 @@
 }
 .courseButton {
   color: #fff;
+  cursor: pointer;
   background-color: #2DBE61;
   border-radius: 20px;
   padding: 10px 80px;
+}
+.courseButton:hover {
+  background-color: #209b4d;
 }
 .courseProgramCard {
   padding: 15px;

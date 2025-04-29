@@ -24,9 +24,6 @@ export const ClientCourseMain = ({ course }: any) => {
                 dangerouslySetInnerHTML={{ __html: course?.description }}
               />
             </Flex>
-            <Flex>
-              <a className={styles.courseButton}>Начать курс</a>
-            </Flex>
           </Flex>
         </Grid.Col>
         <Grid.Col span={5} className={styles.courseImage}>
