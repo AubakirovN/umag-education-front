@@ -60,7 +60,7 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
       phone: (value) => {
         if (!value) {
           return t("loginForm.errors.required");
-        } else if (value && !/^\+7 \(\d{3}\) \d{3}-\d{4}$/.test(value)) {
+        } else if (value && !/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(value)) {
           return "Неверный формат номера телефона";
         } else {
           return null;
@@ -151,8 +151,8 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
               }
             }}
             component={IMaskInput}
-            placeholder="+7 (XXX) XXX-XXXX"
-            mask="+7 (000) 000-0000"
+            placeholder="+7 (XXX) XXX-XX-XX"
+            mask="+7 (000) 000-00-00"
             withAsterisk
           />
           <TextInput value={role} disabled label="Роль" withAsterisk />
