@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { GuestHeader } from "./components/GuestHeader";
 import { Footer } from "../Footer";
 import { useSelector } from "react-redux";
@@ -7,11 +7,12 @@ import { useEffect } from "react";
 
 export function GuestLayout() {
   const isAuth = useSelector((state: RootState) => state.user.isAuthenticated);
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuth) {
-      navigate("/app");
+      navigate(`/app${location?.pathname}`);
     }
   }, [isAuth]);
 

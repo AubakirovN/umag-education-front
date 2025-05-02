@@ -1,7 +1,10 @@
 import { Badge, Card, Flex, Grid, Text, Title } from "@mantine/core";
 import styles from "./Course.module.css";
+import { useDispatch } from "react-redux";
+import { openLoginModal } from "@/slice/userSlice";
 
 export const CourseMain = ({ course }: any) => {
+  const dispatch = useDispatch();
   return (
     <Card
       className={styles.courseMainCard}
@@ -25,7 +28,12 @@ export const CourseMain = ({ course }: any) => {
               />
             </Flex>
             <Flex>
-              <span className={styles.courseButton}>Начать курс</span>
+              <span
+                className={styles.courseButton}
+                onClick={() => dispatch(openLoginModal())}
+              >
+                Начать курс
+              </span>
             </Flex>
           </Flex>
         </Grid.Col>

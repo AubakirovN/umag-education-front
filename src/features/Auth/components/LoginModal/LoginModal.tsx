@@ -17,7 +17,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IMaskInput } from "react-imask";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 interface LoginModalProps {
   opened: boolean;
@@ -33,7 +32,6 @@ export function LoginModal({
   openRecover,
 }: LoginModalProps) {
   const { t } = useTranslation("auth");
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [err, setErr] = useState("");
@@ -88,7 +86,6 @@ export function LoginModal({
       dispatch(setLogin());
       dispatch(setUser(user));
       closeModal();
-      navigate("app");
     } catch (e: any) {
       setErr(e.response?.data?.message);
     } finally {
