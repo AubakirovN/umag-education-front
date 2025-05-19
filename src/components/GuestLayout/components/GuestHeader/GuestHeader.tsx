@@ -37,7 +37,7 @@ export function GuestHeader() {
         >
           <Logo type={LogoType.dark} w={100} h={60} />
           <Flex gap={20} wrap="wrap">
-            <TextInput
+            {/* <TextInput
               styles={{
                 input: {
                   textAlign: "center",
@@ -55,7 +55,7 @@ export function GuestHeader() {
               fz={16}
             >
               Топ специалистов
-            </Button>
+            </Button> */}
             {/* <LanguageSwitcher /> */}
             <Button
               variant="subtle"

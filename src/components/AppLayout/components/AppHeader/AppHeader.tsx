@@ -1,12 +1,14 @@
-import { Box, Button, Flex, Menu, TextInput } from "@mantine/core";
+import { Box, Button, Flex, Menu } from "@mantine/core";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
-import { IconDoorExit, IconSearch } from "@tabler/icons-react";
+import { IconDoorExit, IconSettings } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { resetAll } from "@/slice/resetAction";
 import { RootState } from "@/store";
+import { useNavigate } from "react-router-dom";
 
 export function AppHeader() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector((state: RootState) => state.user.currentUser);
 
@@ -25,7 +27,7 @@ export function AppHeader() {
         >
           <Logo type={LogoType.dark} w={100} h={60} />
           <Flex gap={20} wrap="wrap">
-            <TextInput
+            {/* <TextInput
               styles={{
                 input: {
                   textAlign: "center",
@@ -43,7 +45,7 @@ export function AppHeader() {
               fz={16}
             >
               Топ специалистов
-            </Button>
+            </Button> */}
             {/* <LanguageSwitcher /> */}
             <Menu shadow="md" width={200}>
               <Menu.Target>
@@ -61,13 +63,13 @@ export function AppHeader() {
 
               <Menu.Dropdown>
                 <Menu.Label>{user?.email}</Menu.Label>
-                {/* <Menu.Item
+                <Menu.Item
                   icon={<IconSettings size={14} />}
                   onClick={() => navigate("/app/profile")}
                 >
                   Профиль
                 </Menu.Item>
-                <Menu.Divider /> */}
+                <Menu.Divider />
                 <Menu.Item
                   color="red"
                   icon={<IconDoorExit size={14} />}

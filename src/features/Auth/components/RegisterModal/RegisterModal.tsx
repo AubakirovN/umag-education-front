@@ -2,7 +2,7 @@ import { CustomModal } from "@/components/CustomModal";
 import { LoadingBlock } from "@/components/LoadingBlock";
 import { getUserRole, register } from "@/core/api";
 import { RegisterDto } from "@/core/types";
-import { Alert, Button, InputBase, Text, TextInput } from "@mantine/core";
+import { Alert, Button, Flex, InputBase, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconAlertCircleFilled } from "@tabler/icons-react";
 import { useState } from "react";
@@ -104,6 +104,7 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
       opened={opened}
       onClose={closeModal}
       title="Регистрация"
+      size={600}
       fz={24}
     >
       {err ? (
@@ -122,16 +123,19 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
             onSubmit(values);
           })}
         >
+          <Flex direction='column' gap={14}>
           <TextInput
             label={t("loginForm.fio")}
             placeholder="Введите ваше полное имя"
             {...form.getInputProps("name")}
+            styles={{input: {height: 60, borderRadius: 12}}}
             withAsterisk
           />
           <TextInput
             label={t("loginForm.email")}
             placeholder={t("loginForm.enterEmail")}
             {...form.getInputProps("email")}
+            styles={{input: {height: 60, borderRadius: 12}}}
             withAsterisk
           />
           <InputBase
@@ -150,12 +154,14 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
                 }
               }
             }}
+            styles={{input: {height: 60, borderRadius: 12}}}
             component={IMaskInput}
             placeholder="+7 (XXX) XXX-XX-XX"
             mask="+7 (000) 000-00-00"
             withAsterisk
           />
-          <TextInput value={role} disabled label="Роль" withAsterisk />
+          </Flex>
+          {/* <TextInput value={role} disabled label="Роль" withAsterisk /> */}
           {/* <PasswordInput
           label={t("loginForm.password.label")}
           placeholder={t("loginForm.password.placeholder")}
@@ -164,14 +170,13 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
           {...form.getInputProps("password")}
         /> */}
           <Button
-            disabled={!role}
             fullWidth
             type="submit"
             variant="outline"
-            style={{
-              border: role ? "1px solid #2DBE61" : "1px solid #ccc",
-              color: role ? "#2DBE61" : "gray",
-            }}
+            c="#2DBE61"
+            radius={10}
+            h={60}
+            style={{border: '1px solid #2DBE61', fontSize: 16, fontWeight: 500}}
             mt="md"
           >
             Подать заявку

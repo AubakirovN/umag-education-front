@@ -47,7 +47,7 @@ export function LoginModal({
         if (!value) {
           return t("loginForm.errors.required");
         } else if (value && !/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(value)) {
-          return 'Неверный формат номера телефона';
+          return "Неверный формат номера телефона";
         } else {
           return null;
         }
@@ -94,7 +94,13 @@ export function LoginModal({
   };
 
   return (
-    <CustomModal opened={opened} onClose={closeModal} title="Войти" fz={24}>
+    <CustomModal
+      opened={opened}
+      onClose={closeModal}
+      title="Войти"
+      fz={24}
+      size={600}
+    >
       {err ? (
         <Alert
           icon={<IconAlertCircleFilled size="1rem" />}
@@ -116,6 +122,7 @@ export function LoginModal({
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             handleNumber(e.target.value)
           }
+          styles={{ input: { height: 60, borderRadius: 12 } }}
           component={IMaskInput}
           placeholder="+7 (XXX) XXX-XX-XX"
           mask="+7 (000) 000-00-00"
@@ -125,6 +132,10 @@ export function LoginModal({
           label={t("loginForm.password.label")}
           placeholder={t("loginForm.password.placeholder")}
           mt="md"
+          styles={{
+            input: { height: 60, borderRadius: 12 },
+            innerInput: { height: 60 },
+          }}
           withAsterisk
           {...form.getInputProps("password")}
         />
@@ -143,10 +154,17 @@ export function LoginModal({
         <Flex justify="flex-end" gap={10}>
           <Button
             fullWidth
-            variant="outline"
             type="submit"
+            variant="outline"
+            c="#2DBE61"
+            radius={10}
+            h={60}
+            style={{
+              border: "1px solid #2DBE61",
+              fontSize: 16,
+              fontWeight: 500,
+            }}
             mt="md"
-            style={{ border: "1px solid #2DBE61", color: "#2DBE61" }}
           >
             {t("loginForm.submitButton")}
           </Button>

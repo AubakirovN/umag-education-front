@@ -89,7 +89,7 @@ export const Courses = ({ chosenRole }: CoursesProps) => {
   return (
     <>
       {/* <CourseSearcher /> */}
-      <Grid mt={5}>
+      <Grid mt={5} gutter={32}>
         <LoadingOverlay visible={isLoading} overlayBlur={2} />
         {data
           ?.slice(0, pagination.pageSize)
@@ -132,7 +132,7 @@ export const Courses = ({ chosenRole }: CoursesProps) => {
                   </Flex>
                   <Group>
                     <Badge color="orange" variant="outline" fz={12}>
-                      {course?.roles?.[0]?.name}
+                      <span style={{color: '#000'}}>{course?.roles?.[0]?.name}</span>
                     </Badge>
                   </Group>
                 </Flex>

@@ -12,6 +12,7 @@ import { AppLayout } from "./components/AppLayout/AppLayout.tsx";
 import { ClientCoursePage } from "./features/Landing/pages/ClientCoursePage/ClientCoursePage.tsx";
 import { ConfirmPage } from "./features/Auth/pages/ConfirmPage/ConfirmPage.tsx";
 import { ResetPage } from "./features/Auth/pages/ResetPage/ResetPage.tsx";
+import { ClientProfilePage } from "./features/Landing/pages/ClientProfilePage/ClientProfilePage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <LandingPage /> },
       { path: "courses/:id", element: <ClientCoursePage /> },
+      { path: "profile", element: <ClientProfilePage /> },
     ],
   },
   {

@@ -4,6 +4,7 @@ import { Footer } from "../Footer";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useEffect } from "react";
+import { Container } from "@mantine/core";
 
 export function GuestLayout() {
   const isAuth = useSelector((state: RootState) => state.user.isAuthenticated);
@@ -19,9 +20,11 @@ export function GuestLayout() {
   return (
     <div className="wrapper">
       <GuestHeader />
+      <Container size={1234}>
       <div className="main">
         <Outlet />
       </div>
+      </Container>
       <Footer />
     </div>
   );

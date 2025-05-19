@@ -19,7 +19,7 @@ export function AppLayout() {
   return (
     <>
       <AppHeader />
-      <Container size="xl">
+      <Container size={1234}>
         <Outlet />
       </Container>
       <Footer />

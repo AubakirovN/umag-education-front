@@ -1,4 +1,4 @@
-import { Box, Chip, Group } from "@mantine/core";
+import { Box, Chip, Flex, Group } from "@mantine/core";
 import "./CourseTags.css";
 import { SetStateAction, useEffect, useState } from "react";
 import { getRoles } from "@/core/api/courseApi";
@@ -39,7 +39,7 @@ export function CourseRoles({ chosenRole, setChosenRole }: CourseRolesProps) {
           value={chosenRole}
           onChange={(val: string) => setChosenRole(val)}
         >
-          <Group spacing="xs">
+          <Flex gap={10} justify='space-between' wrap="wrap">
             <Chip
               checked={!chosenRole}
               key="all"
@@ -90,7 +90,7 @@ export function CourseRoles({ chosenRole, setChosenRole }: CourseRolesProps) {
                 {role?.name}
               </Chip>
             ))}
-          </Group>
+          </Flex>
         </Chip.Group>
       </Box>
     </>

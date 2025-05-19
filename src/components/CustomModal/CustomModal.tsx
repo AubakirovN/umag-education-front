@@ -37,6 +37,7 @@ export function CustomModal({
         title: { fontSize: fz || 16 },
         header: { borderRadius: 10 },
         body: { borderRadius: 10 },
+        content: {padding: 40}
       }}
       // closeOnClickOutside={false}
       onClose={onClose}
