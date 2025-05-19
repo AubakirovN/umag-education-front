@@ -1,7 +1,6 @@
-import { Box, Button, Flex, TextInput } from "@mantine/core";
+import { Box, Button, Flex } from "@mantine/core";
 // import { useStyles } from "./styles.ts";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
-import { IconSearch } from "@tabler/icons-react";
 import { LoginModal } from "@/features/Auth/components/LoginModal";
 import { useState } from "react";
 import { RegisterModal } from "@/features/Auth/components/RegisterModal";

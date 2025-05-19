@@ -17,7 +17,7 @@ interface RegisterModalProps {
 export function RegisterModal({ opened, onClose }: RegisterModalProps) {
   const { t } = useTranslation("auth");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
+  // const [role, setRole] = useState("");
   const [success, setSuccess] = useState(false);
   const [err, setErr] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -143,12 +143,12 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
             {...form.getInputProps("phone")}
             onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
               setErr("");
-              setRole("");
+              // setRole("");
               handleNumber(e.target.value);
               if (e.target.value?.length === 17) {
                 try {
-                  const response = await getUserRole({ phone: e.target.value });
-                  setRole(response?.data?.role_name);
+                  await getUserRole({ phone: e.target.value });
+                  // setRole(response?.data?.role_name);
                 } catch (e: any) {
                   setErr(e.response.data?.message);
                 }

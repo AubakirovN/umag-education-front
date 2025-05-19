@@ -1,4 +1,4 @@
-import { Box, Chip, Flex, Group } from "@mantine/core";
+import { Box, Chip, Flex } from "@mantine/core";
 import "./CourseTags.css";
 import { SetStateAction, useEffect, useState } from "react";
 import { getRoles } from "@/core/api/courseApi";
