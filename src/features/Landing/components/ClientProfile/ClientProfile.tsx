@@ -1,23 +1,27 @@
+import { editProfile } from "@/core/api";
+import { setName } from "@/slice/userSlice";
 import { RootState } from "@/store";
 import { Button, Flex, InputBase, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IMaskInput } from "react-imask";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const ClientProfile = () => {
   const { t } = useTranslation("auth");
+  const dispatch = useDispatch();
   const { phone, email, name } = useSelector(
     (state: RootState) => state.user.currentUser
   );
+  const [isLoading, setIsLoading] = useState(false);
+  const [changes, setChanges] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
   const form = useForm({
     initialValues: {
       name: "",
       email: "",
-      phone: "",
     },
 
     validate: {
@@ -39,94 +43,89 @@ export const ClientProfile = () => {
           return t("loginForm.errors.required");
         }
       },
-      // password: (value) => {
-      //   if (!value) {
-      //     return t("loginForm.errors.required");
-      //   }
-      //   if (value.length < 8) {
-      //     return t("loginForm.errors.length");
-      //   }
-      //   return null;
-      // },
-      phone: (value) => {
-        if (!value) {
-          return t("loginForm.errors.required");
-        } else if (value && !/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(value)) {
-          return "Неверный формат номера телефона";
-        } else {
-          return null;
-        }
-      },
     },
   });
 
-  const handleNumber = (value: string) => {
-    form.setFieldValue("phone", value);
-    if (value?.length <= 4) {
-      form.setFieldValue("phone", "");
+  const onSubmit = async (values: any) => {
+    // if (name !== values.name && email !== values.email) {
+    //   console.log("1");
+    // } else if (name !== values.name) {
+    //   console.log("2");
+    // } else if (name !== values.email) {
+    //   console.log("3");
+    // }
+    setIsLoading(true);
+    try {
+      const response = await editProfile(values);
+      dispatch(setName(response?.data?.name));
+      setHasChanges(false);
+      setChanges(!changes);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     form.setValues({
-      phone: phone,
       email: email,
       name: name,
     });
-  }, []);
+  }, [changes]);
 
   return (
     <Flex w="100%" justify="center">
-      <Flex
-        direction="column"
-        style={{ width: 600, padding: 40, borderRadius: 10 }}
-        gap={24}
-      >
-        <TextInput
-          label={t("loginForm.fio")}
-          placeholder="Введите ваше полное имя"
-          {...form.getInputProps("name")}
-          onChange={(e) => {
-            form.setFieldValue('name', e.target.value);
-            setHasChanges(true);
-          }}
-          withAsterisk
-        />
-        <TextInput
-          label={t("loginForm.email")}
-          placeholder={t("loginForm.enterEmail")}
-          {...form.getInputProps("email")}
-          onChange={(e) => {
-            form.setFieldValue('email', e.target.value);
-            setHasChanges(true);
-          }}
-          withAsterisk
-        />
-        <InputBase
-          label={t("loginForm.phone")}
-          disabled
-          {...form.getInputProps("phone")}
-          onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-            handleNumber(e.target.value);
-          }}
-          component={IMaskInput}
-          placeholder="+7 (XXX) XXX-XX-XX"
-          mask="+7 (000) 000-00-00"
-          withAsterisk
-        />
-        <Button
-          style={{ fontSize: 16, opacity: !hasChanges ? '40%' : 1 }}
-          c="#fff !important"
-          disabled={!hasChanges}
-          bg="#2DBE61 !important"
-          radius={100}
-          fullWidth
-          type="submit"
-          mt="md"
+      <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+        <Flex
+          direction="column"
+          style={{ width: 600, padding: 40, borderRadius: 10 }}
+          gap={24}
         >
-          Сохранить изменения
-        </Button>
-      </Flex>
+          <TextInput
+            label={t("loginForm.fio")}
+            placeholder="Введите ваше полное имя"
+            {...form.getInputProps("name")}
+            onChange={(e) => {
+              form.setFieldValue("name", e.target.value);
+              setHasChanges(true);
+            }}
+            withAsterisk
+          />
+          <TextInput
+            label={t("loginForm.email")}
+            placeholder={t("loginForm.enterEmail")}
+            {...form.getInputProps("email")}
+            onChange={(e) => {
+              form.setFieldValue("email", e.target.value);
+              setHasChanges(true);
+            }}
+            withAsterisk
+          />
+          <InputBase
+            label={t("loginForm.phone")}
+            disabled
+            value={phone}
+            component={IMaskInput}
+            placeholder="+7 (XXX) XXX-XX-XX"
+            mask="+7 (000) 000-00-00"
+            withAsterisk
+          />
+          <Button
+            loading={isLoading}
+            style={{ fontSize: 16, opacity: !hasChanges ? "40%" : 1 }}
+            c="#fff !important"
+            disabled={!hasChanges}
+            bg="#2DBE61 !important"
+            radius={100}
+            fullWidth
+            type="submit"
+            mt="md"
+          >
+            Сохранить изменения
+          </Button>
+        </Flex>
+      </form>
     </Flex>
   );
 };

@@ -31,3 +31,7 @@ export const resetPass = async (body: ResetPassDto): Promise<any> => {
   const response = await axios.post<any>(`${baseUrl}/reset-password`, body);
   return response.data;
 };
+export const editProfile = async (body: any): Promise<any> => {
+  const response = await axios.put(`${baseUrl}/profile`, body);
+  return response.data;
+}
