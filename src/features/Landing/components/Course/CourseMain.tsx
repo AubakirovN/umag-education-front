@@ -1,4 +1,4 @@
-import { Badge, Card, Flex, Grid, Text, Title } from "@mantine/core";
+import { Card, Flex, Grid, Text, Title } from "@mantine/core";
 import styles from "./Course.module.css";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "@/slice/userSlice";

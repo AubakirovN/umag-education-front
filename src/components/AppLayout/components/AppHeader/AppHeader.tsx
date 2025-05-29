@@ -1,8 +1,7 @@
 import { Box, Flex } from "@mantine/core";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { resetAll } from "@/slice/resetAction";
-import { RootState } from "@/store";
 import { useNavigate } from "react-router-dom";
 import styles from './AppHeader.module.css'
 
@@ -10,7 +9,7 @@ export function AppHeader() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector((state: RootState) => state.user.currentUser);
+  // const user = useSelector((state: RootState) => state.user.currentUser);
 
   const logout = () => {
     localStorage.removeItem('accessToken');

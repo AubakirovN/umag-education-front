@@ -1,4 +1,4 @@
-import { Badge, Card, Flex, Grid, Text, Title } from "@mantine/core";
+import { Card, Flex, Grid, Text, Title } from "@mantine/core";
 import styles from "./ClientCourse.module.css";
 
 export const ClientCourseMain = ({ course }: any) => {
