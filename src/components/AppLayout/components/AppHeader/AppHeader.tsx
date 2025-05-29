@@ -1,10 +1,10 @@
-import { Box, Button, Flex, Menu } from "@mantine/core";
+import { Box, Flex } from "@mantine/core";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
-import { IconDoorExit, IconSettings } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { resetAll } from "@/slice/resetAction";
 import { RootState } from "@/store";
 import { useNavigate } from "react-router-dom";
+import styles from './AppHeader.module.css'
 
 export function AppHeader() {
   const dispatch = useDispatch();
@@ -47,21 +47,23 @@ export function AppHeader() {
               Топ специалистов
             </Button> */}
             {/* <LanguageSwitcher /> */}
-            <Menu shadow="md" width={200}>
-              <Menu.Target>
-                <Button
-                  sx={{
-                    backgroundColor: "#FFAE1F",
-                    "&:hover": { backgroundColor: "#fff", color: "#000" },
-                  }}
-                  fz={16}
-                  radius={20}
+            {/* <Menu shadow="md" width={200}>
+              <Menu.Target> */}
+                <span
+                className={styles.appHeaderButton}
+                  onClick={() => navigate('/app/profile')}
                 >
-                  Личный кабинет
-                </Button>
-              </Menu.Target>
+                  Профиль
+                </span>
+                <span
+                className={styles.appHeaderButton}
+                  onClick={logout}
+                >
+                  Выход
+                </span>
+              {/* </Menu.Target> */}
 
-              <Menu.Dropdown>
+              {/* <Menu.Dropdown>
                 <Menu.Label>{user?.email}</Menu.Label>
                 <Menu.Item
                   icon={<IconSettings size={14} />}
@@ -78,7 +80,7 @@ export function AppHeader() {
                   Выход
                 </Menu.Item>
               </Menu.Dropdown>
-            </Menu>
+            </Menu> */}
           </Flex>
         </Flex>
       </Flex>

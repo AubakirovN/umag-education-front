@@ -3,6 +3,7 @@ import { ClientCourseMain } from "./ClientCourseMain";
 import { ClientCourseProgram } from "./ClientCourseProgram";
 import { useEffect, useState } from "react";
 import { getCourse } from "@/core/api";
+import { ClientCourseInfo } from "./ClientCourseInfo";
 
 
 
@@ -21,6 +22,7 @@ export const ClientCourse = () => {
   return (
     <>
       <ClientCourseMain course={course} />
+      <ClientCourseInfo course={course} />
       <ClientCourseProgram course={course} />
     </>
   );

@@ -24,12 +24,18 @@ export const ClientCourseMain = ({ course }: any) => {
                 dangerouslySetInnerHTML={{ __html: course?.description }}
               />
             </Flex>
+            <Flex>
+              <span
+                className={styles.courseButton}
+                onClick={() => console.log("navigate to lesson page")}
+              >
+                Начать курс
+              </span>
+            </Flex>
           </Flex>
         </Grid.Col>
-        <Grid.Col span={5} className={styles.courseImage}>
-          <Badge color="orange" variant="outline" fz={12}>
-            {course?.roles?.[0]?.name}
-          </Badge>
+        <Grid.Col span={5}>
+          <div className={styles.courseImage} />
         </Grid.Col>
       </Grid>
     </Card>

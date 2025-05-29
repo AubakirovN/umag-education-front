@@ -38,9 +38,9 @@ export const CourseMain = ({ course }: any) => {
           </Flex>
         </Grid.Col>
         <Grid.Col span={5} className={styles.courseImage}>
-          <Badge color="orange" variant="outline" fz={12}>
+          {/* <Badge color="orange" variant="outline" fz={12}>
             {course?.roles?.[0]?.name}
-          </Badge>
+          </Badge> */}
         </Grid.Col>
       </Grid>
     </Card>

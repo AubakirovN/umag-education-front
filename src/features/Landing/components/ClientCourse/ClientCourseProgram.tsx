@@ -1,4 +1,4 @@
-import { Accordion, Card, Flex, Text, Title } from "@mantine/core";
+import { Accordion, Card, Flex, Progress, Text, Title } from "@mantine/core";
 import styles from "./ClientCourse.module.css";
 import ReactPlayer from "react-player/youtube";
 
@@ -21,17 +21,24 @@ export const ClientCourseProgram = ({ course }: any) => {
             {course?.course_blocks
               ?.sort((a: any, b: any) => a.number - b.number)
               ?.map((item: any) => (
-                <Accordion.Item value={item.id.toString()} key={item.id}>
+                <Accordion.Item value={item.id.toString()} key={item.id} className={styles.courseProgramItem}>
                   <Accordion.Control>
-                    <Flex w="100%">
+                    <Flex w="100%" justify='space-between' align='center'>
                       <Flex w="100%" direction="column">
-                        <Flex gap={10}>
+                        <Flex gap={10} align='center'>
                           <span style={{ color: "#2DBE61" }}>
                             Блок {item.number}
                           </span>
                           <Text fw={500}>{item.title}</Text>
                         </Flex>
                       </Flex>
+                      <Progress
+                        style={{ width: 100 }}
+                        value={50}
+                        label="50%"
+                        size="xl"
+                        radius="xl"
+                      />
                     </Flex>
                   </Accordion.Control>
                   <Accordion.Panel>
@@ -70,6 +77,11 @@ export const ClientCourseProgram = ({ course }: any) => {
                             />
                           </div>
                         )}
+                                                <Flex justify="flex-end" mt={20}>
+                          <span className={styles.goToLesson}>
+                            Перейти к уроку
+                          </span>
+                        </Flex>
                       </Flex>
                     ))}
                   </Accordion.Panel>
