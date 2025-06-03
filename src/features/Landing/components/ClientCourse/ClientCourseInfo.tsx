@@ -37,10 +37,10 @@ export const ClientCourseInfo = ({ course }: any) => {
         >
           <Flex direction="column">
             <Text fz={32} fw={500}>
-              1 месяц
+              {course?.duration} месяц
             </Text>
             <Text fz={16} fw={400} c="#615c69">
-            Длительность курса включая все лекции и тестирования
+              Длительность курса включая все лекции и тестирования
             </Text>
           </Flex>
         </Card>
@@ -60,7 +60,7 @@ export const ClientCourseInfo = ({ course }: any) => {
               Сертификат
             </Text>
             <Text fz={16} fw={400} c="#615c69">
-            После окончания курса выдаётся индивидуальный сертификат
+              После окончания курса выдаётся индивидуальный сертификат
             </Text>
           </Flex>
         </Card>
@@ -75,17 +75,9 @@ export const ClientCourseInfo = ({ course }: any) => {
             backgroundColor: "#f5f5f5",
           }}
         >
-          <Flex direction="column">
-            <Text fz={32} fw={500}>
-              В рамках обучения вы освоите:
-            </Text>
-            <Text fz={16} fw={400} c="#615c69">
-            • принципы работы с программой UMAG;<br/>• основные функции и инструменты
-              Admin панели;<br/>• методы оказания технической поддержки пользователям;<br/>
-              • процедуры установки и настройки оборудования;<br/>• стандарты выездного
-              обслуживания и обучения пользователей.
-            </Text>
-          </Flex>
+          <span
+            dangerouslySetInnerHTML={{ __html: course?.description_extra }}
+          />
         </Card>
       </Grid.Col>
     </Grid>
