@@ -34,4 +34,8 @@ export const resetPass = async (body: ResetPassDto): Promise<any> => {
 export const editProfile = async (body: any): Promise<any> => {
   const response = await axios.put(`${baseUrl}/profile`, body);
   return response.data;
-}
+};
+export const confirmNewEmail = async (body: any): Promise<any> => {
+  const response = await axios.post(`${baseUrl}/profile/confirm-email`, body);
+  return response.data;
+};

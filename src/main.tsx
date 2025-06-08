@@ -24,7 +24,10 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           withNormalizeCSS
           theme={{ fontFamily: "Geologica, sans-serif" }}
         >
-          <Notifications />
+          <Notifications
+            position="top-center"
+            maw={500}
+          />
           <Suspense>
             <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>

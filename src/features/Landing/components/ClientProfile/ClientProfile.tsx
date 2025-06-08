@@ -1,22 +1,29 @@
-import { editProfile } from "@/core/api";
-import { setName } from "@/slice/userSlice";
+import { confirmNewEmail, editProfile, getUserInfo } from "@/core/api";
+import { setName, setUser } from "@/slice/userSlice";
 import { RootState } from "@/store";
-import { Button, Flex, InputBase, TextInput } from "@mantine/core";
+import { Button, Flex, InputBase, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { IconCircleCheck } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IMaskInput } from "react-imask";
 import { useDispatch, useSelector } from "react-redux";
+import { ClientProfileModal } from "./ClientProfileModal";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const ClientProfile = () => {
   const { t } = useTranslation("auth");
+  const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { phone, email, name } = useSelector(
     (state: RootState) => state.user.currentUser
   );
   const [isLoading, setIsLoading] = useState(false);
   const [changes, setChanges] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
 
   const form = useForm({
     initialValues: {
@@ -47,16 +54,38 @@ export const ClientProfile = () => {
   });
 
   const onSubmit = async (values: any) => {
-    // if (name !== values.name && email !== values.email) {
-    //   console.log("1");
-    // } else if (name !== values.name) {
-    //   console.log("2");
-    // } else if (name !== values.email) {
-    //   console.log("3");
-    // }
     setIsLoading(true);
     try {
       const response = await editProfile(values);
+      if (name !== values.name && email !== values.email) {
+        setNewEmail(values.email);
+      } else if (name !== values.name) {
+        notifications.show({
+          title: "",
+          message: (
+            <Flex gap={16} align="center">
+              <IconCircleCheck size={30} />
+              <Text fz={24} fw={500} color="#000">
+                Изменения сохранены успешно
+              </Text>
+            </Flex>
+          ),
+          withCloseButton: false,
+          icon: "",
+          style: { background: "#E1F9E4", padding: 24, borderRadius: 24 },
+          styles: {
+            root: {
+              "::before": {
+                display: "none",
+              },
+            },
+          },
+          autoClose: false,
+        });
+        setNewEmail(values.email);
+      } else if (name !== values.email) {
+        setNewEmail(values.email);
+      }
       dispatch(setName(response?.data?.name));
       setHasChanges(false);
       setChanges(!changes);
@@ -67,12 +96,30 @@ export const ClientProfile = () => {
     }
   };
 
+  const confirmEmail = async () => {
+    try {
+      await confirmNewEmail({ token: id });
+      const user = await getUserInfo();
+      dispatch(setUser(user));
+      navigate("/app/profile");
+      setChanges(!changes);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     form.setValues({
       email: email,
       name: name,
     });
   }, [changes]);
+
+  useEffect(() => {
+    if (id) {
+      confirmEmail();
+    }
+  }, [id]);
 
   return (
     <Flex w="100%" justify="center">
@@ -126,6 +173,11 @@ export const ClientProfile = () => {
           </Button>
         </Flex>
       </form>
+      <ClientProfileModal
+        opened={Boolean(newEmail)}
+        closeModal={() => setNewEmail("")}
+        email={newEmail}
+      />
     </Flex>
   );
 };
