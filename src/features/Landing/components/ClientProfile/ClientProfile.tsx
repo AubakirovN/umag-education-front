@@ -82,7 +82,6 @@ export const ClientProfile = () => {
           },
           autoClose: false,
         });
-        setNewEmail(values.email);
       } else if (name !== values.email) {
         setNewEmail(values.email);
       }
