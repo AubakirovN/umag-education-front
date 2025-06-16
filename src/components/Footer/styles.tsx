@@ -2,7 +2,6 @@ import {createStyles, rem} from "@mantine/core";
 
 export const useStyles = createStyles((theme) => ({
   footer: {
-    marginTop: rem(20),
     backgroundColor: '#2C2C2C',
     borderTop: `${rem(1)} solid ${
       theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.dark[5]

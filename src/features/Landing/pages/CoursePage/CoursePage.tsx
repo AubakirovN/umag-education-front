@@ -30,9 +30,9 @@ export const CoursePage = () => {
     </Anchor>
   ));
   return (
-    <>
+    <div>
       <Breadcrumbs separator={<IconChevronRight />}>{items}</Breadcrumbs>
       <Course course={course} />
-    </>
+    </div>
   );
 };

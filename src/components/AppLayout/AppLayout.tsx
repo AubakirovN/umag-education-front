@@ -19,9 +19,7 @@ export function AppLayout() {
   return (
     <>
       <AppHeader />
-      <Container size={1234}>
         <Outlet />
-      </Container>
       <Footer />
     </>
   );

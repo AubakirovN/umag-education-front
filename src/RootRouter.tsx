@@ -13,6 +13,7 @@ import { ClientCoursePage } from "./features/Landing/pages/ClientCoursePage/Clie
 import { ConfirmPage } from "./features/Auth/pages/ConfirmPage/ConfirmPage.tsx";
 import { ResetPage } from "./features/Auth/pages/ResetPage/ResetPage.tsx";
 import { ClientProfilePage } from "./features/Landing/pages/ClientProfilePage/ClientProfilePage.tsx";
+import { ClientLessonPage } from "./features/Landing/pages/ClientLessonPage/ClientLessonPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <LandingPage /> },
       { path: "courses/:id", element: <ClientCoursePage /> },
+      { path: "courses/:id/lessons", element: <ClientLessonPage /> },
       { path: "profile/:id?", element: <ClientProfilePage /> },
     ],
   },

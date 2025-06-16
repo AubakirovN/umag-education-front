@@ -22,15 +22,30 @@
 }
 .courseButton {
   color: #fff;
+  cursor: pointer;
   background-color: #2DBE61;
   border-radius: 20px;
   padding: 10px 80px;
+}
+.courseButton:hover {
+  background-color: #209b4d;
 }
 .courseProgramCard {
   padding: 15px;
 }
 .courseProgramItem {
   border-radius: 24px;
+}
+.goToLesson {
+  cursor: pointer;
+  padding: 12px 28px;
+  color: #000;
+  border: 1px solid rgba(31, 31, 31, 0.32);
+  background: #f5f5f5;
+  cursor: pointer;
+  border-radius: 100px;
+  font-size: 16;
+  font-weight: 400;
 }
 
 @media screen and (min-width: 425px) {

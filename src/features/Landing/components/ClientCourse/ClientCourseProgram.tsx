@@ -1,8 +1,11 @@
 import { Accordion, Card, Flex, Progress, Text, Title } from "@mantine/core";
 import styles from "./ClientCourse.module.css";
 import ReactPlayer from "react-player/youtube";
+import { useNavigate } from "react-router-dom";
 
 export const ClientCourseProgram = ({ course }: any) => {
+  const navigate = useNavigate();
+
   return (
     <Flex direction="column">
       <Title my={20}>Программа курса</Title>
@@ -17,17 +20,21 @@ export const ClientCourseProgram = ({ course }: any) => {
         }}
       >
         {course?.course_blocks?.length > 0 && (
-          <Accordion chevronPosition="right" variant='separated'>
+          <Accordion chevronPosition="right" variant="separated">
             {course?.course_blocks
               ?.sort((a: any, b: any) => a.number - b.number)
               ?.map((item: any) => (
-                <Accordion.Item value={item.id.toString()} key={item.id} className={styles.courseProgramItem}>
+                <Accordion.Item
+                  value={item.id.toString()}
+                  key={item.id}
+                  className={styles.courseProgramItem}
+                >
                   <Accordion.Control>
-                    <Flex w="100%" justify='space-between' align='center'>
+                    <Flex w="100%" justify="space-between" align="center">
                       <Flex w="100%" direction="column">
-                        <Flex gap={10} align='center'>
+                        <Flex gap={10} align="center">
                           <span style={{ color: "#2DBE61" }}>
-                            Блок {item.number}
+                            Блок {item.pivot?.block_number}
                           </span>
                           <Text fw={500}>{item.title}</Text>
                         </Flex>
@@ -77,8 +84,15 @@ export const ClientCourseProgram = ({ course }: any) => {
                             />
                           </div>
                         )}
-                                                <Flex justify="flex-end" mt={20}>
-                          <span className={styles.goToLesson}>
+                        <Flex justify="flex-end" mt={20}>
+                          <span
+                            className={styles.goToLesson}
+                            onClick={() =>
+                              navigate(
+                                `/app/courses/${course?.id}/lessons`
+                              )
+                            }
+                          >
                             Перейти к уроку
                           </span>
                         </Flex>

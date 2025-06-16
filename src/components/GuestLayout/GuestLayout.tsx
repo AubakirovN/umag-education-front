@@ -20,10 +20,8 @@ export function GuestLayout() {
   return (
     <div className="wrapper">
       <GuestHeader />
-      <Container size={1234}>
-      <div className="main">
+      <Container size={1234} p={20}>
         <Outlet />
-      </div>
       </Container>
       <Footer />
     </div>

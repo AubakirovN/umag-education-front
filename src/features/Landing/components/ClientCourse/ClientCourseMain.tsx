@@ -1,7 +1,18 @@
 import { Card, Flex, Grid, Text, Title } from "@mantine/core";
 import styles from "./ClientCourse.module.css";
+import { getUserProgress, startCourse } from "@/core/api";
+import { useState } from "react";
 
 export const ClientCourseMain = ({ course }: any) => {
+
+  const [progress, setProgress] = useState(0);
+
+  const handleStart = async () => {
+    await startCourse(course?.id);
+    const progressResponse = await getUserProgress();
+    setProgress(progressResponse || 0);
+  }
+
   return (
     <Card
       className={styles.courseMainCard}
@@ -27,7 +38,7 @@ export const ClientCourseMain = ({ course }: any) => {
             <Flex>
               <span
                 className={styles.courseButton}
-                onClick={() => console.log("navigate to lesson page")}
+                onClick={handleStart}
               >
                 Начать курс
               </span>

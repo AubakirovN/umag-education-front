@@ -17,7 +17,7 @@ export function AppHeader() {
   };
 
   return (
-    <Box mb={20} p={20}>
+    <Box p={20}>
       <Flex align="center" wrap="wrap">
         <Flex
           justify="space-between"

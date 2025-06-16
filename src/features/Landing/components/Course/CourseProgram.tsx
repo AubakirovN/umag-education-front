@@ -31,7 +31,7 @@ export const CourseProgram = ({ course }: any) => {
                       <Flex w="100%" direction="column">
                         <Flex gap={10} align="center">
                           <span style={{ color: "#2DBE61" }}>
-                            Блок {key + 1}
+                            Блок {item?.pivot?.block_number}
                             {/* Блок {item.number} */}
                           </span>
                           <Text fw={500}>{item.title}</Text>

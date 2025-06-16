@@ -34,6 +34,7 @@
   border-radius: 24px;
 }
 .goToLesson {
+  cursor: pointer;
   padding: 12px 28px;
   color: #000;
   border: 1px solid rgba(31, 31, 31, 0.32);

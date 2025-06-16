@@ -15,7 +15,7 @@ import "./styles/App.css";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <HttpInterceptor>
       <QueryClientProvider client={queryClient}>
         <MantineProvider
@@ -24,10 +24,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           withNormalizeCSS
           theme={{ fontFamily: "Geologica, sans-serif" }}
         >
-          <Notifications
-            position="top-center"
-            maw={500}
-          />
+          <Notifications position="top-center" maw={500} />
           <Suspense>
             <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>
@@ -38,5 +35,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </MantineProvider>
       </QueryClientProvider>
     </HttpInterceptor>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
