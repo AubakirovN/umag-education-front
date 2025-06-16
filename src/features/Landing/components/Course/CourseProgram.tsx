@@ -20,7 +20,7 @@ export const CourseProgram = ({ course }: any) => {
           <Accordion chevronPosition="right" variant="separated">
             {course?.course_blocks
               ?.sort((a: any, b: any) => a.number - b.number)
-              ?.map((item: any, key: number) => (
+              ?.map((item: any) => (
                 <Accordion.Item
                   value={item.id.toString()}
                   key={item.id}

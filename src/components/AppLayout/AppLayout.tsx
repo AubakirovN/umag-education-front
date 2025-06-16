@@ -1,6 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { Footer } from "../Footer";
-import { Container } from "@mantine/core";
 import { AppHeader } from "./components/AppHeader";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";

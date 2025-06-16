@@ -13,6 +13,8 @@ export const ClientCourseMain = ({ course }: any) => {
     setProgress(progressResponse || 0);
   }
 
+  console.log(progress)
+
   return (
     <Card
       className={styles.courseMainCard}
