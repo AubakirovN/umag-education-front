@@ -1,5 +1,9 @@
-import { getCourse, getSublessonsByLessonId } from "@/core/api";
-import { Accordion, Box, Flex, ScrollArea, Text } from "@mantine/core";
+import {
+  completeSublesson,
+  getCourse,
+  getSublessonsByLessonId,
+} from "@/core/api";
+import { Accordion, Box, Flex, Progress, ScrollArea, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./ClientLessonPage.module.css";
@@ -30,6 +34,7 @@ export const ClientLessonPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { currentSublesson } = useSelector((state: RootState) => state.course);
+  const [blocks, setBlocks] = useState<any>([]);
   const [lessons, setLessons] = useState<any>([]);
   const [sublessons, setSublessons] = useState<any>([]);
 
@@ -58,11 +63,12 @@ export const ClientLessonPage = () => {
   const getData = async () => {
     const response = await getCourse(id as string);
     const course = response?.data;
+    setBlocks(course?.course_blocks);
     const allLessonIds = course?.course_blocks?.flatMap((block: any) =>
       block.lessons.map((lesson: any) => lesson.id)
     );
     const sublessonResponses = await Promise.all(
-      allLessonIds.map((id: any) => getSublessonsByLessonId(id))
+      allLessonIds?.map((id: any) => getSublessonsByLessonId(id))
     );
 
     const allSublessons = sublessonResponses.flatMap((res) => res.data);
@@ -70,13 +76,13 @@ export const ClientLessonPage = () => {
     setSublessons(allSublessons);
     setLessons(grouped);
     console.log(lessons);
-    dispatch(setCurrentSublesson(lessons?.[0]?.sublessons?.[0]))
+    dispatch(setCurrentSublesson(allSublessons?.[0]));
   };
   useEffect(() => {
     getData();
     return () => {
-      dispatch(resetCourse())
-    }
+      dispatch(resetCourse());
+    };
   }, []);
 
   const goToPrev = () => {
@@ -88,19 +94,45 @@ export const ClientLessonPage = () => {
     }
   };
 
-  const goToNext = () => {
+  const goToNext = async () => {
     const currentIndex = sublessons.findIndex(
       (s: any) => s.id === currentSublesson?.id
     );
     if (currentIndex < sublessons.length - 1) {
+      await completeSublesson(currentSublesson?.id);
       dispatch(setCurrentSublesson(sublessons[currentIndex + 1]));
     }
   };
+  console.log(blocks);
+  console.log(currentSublesson);
 
   return (
-    <Flex w="100%" style={{minHeight: "calc(100vh - 181px)"}}>
+    <Flex w="100%" style={{ minHeight: "calc(100vh - 181px)" }}>
       <Box w={300} p="md" bg="#f5f5f5" pos="sticky">
         <ScrollArea>
+          <Flex gap={10}>
+            <img
+              src="/img/started.svg"
+              style={{ width: 20, height: 20 }}
+              alt="icon"
+            />
+            <Flex direction="column" gap={2}>
+              <Text fz={14} fw={400}>
+                Блок:
+              </Text>
+              <Text fz={20} fw={500} color="#5c5c5c">
+                {
+                  blocks?.find((item: any) =>
+                    item.lessons?.find(
+                      (el: any) => el?.id === currentSublesson?.lesson_id
+                    )
+                  )?.title
+                }
+              </Text>
+            </Flex>
+          </Flex>
+          <Progress mt={20} styles={{bar: {background: '#91D0FF'}}} value={75} label="75%" size="xl" radius="xl" />
+
           <Accordion variant="separated" multiple>
             {lessons.map((lesson: any) => (
               <Accordion.Item
