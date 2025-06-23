@@ -13,6 +13,7 @@ export interface CustomModalProps {
   size?: string | number;
   children: ReactNode;
   scrolling?: boolean;
+  withCloseButton?: boolean;
   fz?: string | number;
   [key: string]: any;
 }
@@ -24,6 +25,7 @@ export function CustomModal({
   children,
   size,
   scrolling,
+  withCloseButton,
   fz,
   ...props
 }: CustomModalProps) {
@@ -39,6 +41,7 @@ export function CustomModal({
         body: { borderRadius: 10 },
         content: {padding: 40}
       }}
+      withCloseButton={withCloseButton === false ? false : true}
       // closeOnClickOutside={false}
       onClose={onClose}
       title={title}

@@ -21,6 +21,11 @@ export const startCourse = async (courseId: string): Promise<any> => {
   return response.data;
 };
 
+export const checkCourseStatus = async (courseId: string): Promise<any> => {
+  const response = await axios.get<any>(`${baseUrl}/courses/front-status/${courseId}`);
+  return response.data;
+};
+
 export const getUserProgress = async (): Promise<any> => {
   const response = await axios.get(`${baseUrl}/user/progress`);
   return response.data;
@@ -37,5 +42,15 @@ export const completeSublesson = async (sublessonId: string): Promise<any> => {
   const response = await axios.get(
     `${baseUrl}/sublessons/complete/${sublessonId}`
   );
+  return response.data;
+};
+
+export const getTestByBlock = async (blockId: string): Promise<any> => {
+  const response = await axios.get(`${baseUrl}/test-questions/random/${blockId}`);
+  return response.data;
+};
+
+export const completeTest = async (body: any): Promise<any> => {
+  const response = await axios.post(`${baseUrl}/test-attempts`, body);
   return response.data;
 };

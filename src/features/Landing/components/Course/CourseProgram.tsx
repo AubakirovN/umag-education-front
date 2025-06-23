@@ -1,8 +1,13 @@
 import { Accordion, Card, Flex, Progress, Text, Title } from "@mantine/core";
 import styles from "./Course.module.css";
 import ReactPlayer from "react-player/youtube";
+import { useDispatch } from "react-redux";
+import { openLoginModal } from "@/slice/userSlice";
 
 export const CourseProgram = ({ course }: any) => {
+
+  const dispatch = useDispatch();
+
   return (
     <Flex direction="column">
       <Title my={20}>Программа курса</Title>
@@ -36,6 +41,14 @@ export const CourseProgram = ({ course }: any) => {
                           </span>
                           <Text fw={500}>{item.title}</Text>
                         </Flex>
+                      </Flex>
+                      <Flex align="center">
+                        <span
+                          className={styles.goToBlock}
+                          onClick={() => dispatch(openLoginModal())}
+                        >
+                          Перейти к блоку
+                        </span>
                       </Flex>
                       <Progress
                         style={{ width: 100 }}
@@ -82,11 +95,6 @@ export const CourseProgram = ({ course }: any) => {
                             />
                           </div>
                         )}
-                        <Flex justify="flex-end" mt={20}>
-                          <span className={styles.goToLesson}>
-                            Перейти к уроку
-                          </span>
-                        </Flex>
                       </Flex>
                     ))}
                   </Accordion.Panel>

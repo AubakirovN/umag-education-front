@@ -1,10 +1,20 @@
-import { Accordion, Card, Flex, Progress, Text, Title } from "@mantine/core";
+import { Accordion, Card, Flex, Text, Title } from "@mantine/core";
 import styles from "./ClientCourse.module.css";
 import ReactPlayer from "react-player/youtube";
 import { useNavigate } from "react-router-dom";
+import { startCourse } from "@/core/api";
+import { useDispatch } from "react-redux";
+import { setCurrentSublesson } from "@/slice/courseSlice";
 
 export const ClientCourseProgram = ({ course }: any) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleClickBlock = async (blockId: string, e:any) => {
+    e.stopPropagation();
+    await startCourse(course?.id as string)
+    navigate(`/app/courses/${course?.id}/block/${blockId}/`)
+  }
 
   return (
     <Flex direction="column">
@@ -30,7 +40,12 @@ export const ClientCourseProgram = ({ course }: any) => {
                   className={styles.courseProgramItem}
                 >
                   <Accordion.Control>
-                    <Flex w="100%" justify="space-between" align="center">
+                    <Flex
+                      w="100%"
+                      justify="space-between"
+                      align="center"
+                      gap={10}
+                    >
                       <Flex w="100%" direction="column">
                         <Flex gap={10} align="center">
                           <span style={{ color: "#2DBE61" }}>
@@ -39,16 +54,21 @@ export const ClientCourseProgram = ({ course }: any) => {
                           <Text fw={500}>{item.title}</Text>
                         </Flex>
                       </Flex>
-                      <Progress
-                        style={{ width: 100 }}
-                        value={50}
-                        label="50%"
-                        size="xl"
-                        radius="xl"
-                      />
+                      <Flex align="center">
+                        <span
+                          className={styles.goToBlock}
+                          onClick={(e) => {
+                            handleClickBlock(item?.pivot?.course_block_id, e)
+                            dispatch(setCurrentSublesson(item?.lessons?.[0]?.sublessons?.[0]))
+                          }}
+                        >
+                          Перейти к блоку
+                        </span>
+                      </Flex>
                     </Flex>
                   </Accordion.Control>
                   <Accordion.Panel>
+                    {console.log(item)}
                     {item?.lessons?.map((el: any, index: any) => (
                       <Flex key={index} direction="column">
                         <Text
@@ -84,18 +104,6 @@ export const ClientCourseProgram = ({ course }: any) => {
                             />
                           </div>
                         )}
-                        <Flex justify="flex-end" mt={20}>
-                          <span
-                            className={styles.goToLesson}
-                            onClick={() =>
-                              navigate(
-                                `/app/courses/${course?.id}/lessons`
-                              )
-                            }
-                          >
-                            Перейти к уроку
-                          </span>
-                        </Flex>
                       </Flex>
                     ))}
                   </Accordion.Panel>

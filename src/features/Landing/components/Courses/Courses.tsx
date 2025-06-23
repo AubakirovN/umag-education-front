@@ -26,7 +26,7 @@ export const Courses = ({ chosenRole }: CoursesProps) => {
   const data: any[] = useMemo(() => courses || [], [courses]);
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
-    pageSize: 12,
+    pageSize: 15,
   });
   const [totalRowCount, setTotalRowCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
