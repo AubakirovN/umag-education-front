@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { FailedModal } from "./FailedModal";
+import { PassedModal } from "./PassedModal";
+import { AnswerModal } from "./AnswerModal";
 
 export const ClientTestPage = () => {
   const dispatch = useDispatch();
   const { id, blockId } = useParams();
   const navigate = useNavigate();
-  const {currentTest} = useSelector((state: RootState) => state.course.test);
+  const { currentTest } = useSelector((state: RootState) => state.course.test);
   const [currentId, setCurrentId] = useState<any>(0);
   const [answers, setAnswers] = useState<any>([]);
   const [blockTitle, setBlockTitle] = useState<string>("");
@@ -26,18 +28,24 @@ export const ClientTestPage = () => {
   );
   const [passed, setPassed] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [passedTest, setPassedTest] = useState<any>(null);
+  const [answerModal, setAnswerModal] = useState(false);
 
-  console.log(passed);
+  const openAnswerModal = () => {
+    setPassed(false);
+    setAnswerModal(true);
+  };
 
   const finishTest = async (body: any) => {
     try {
       const resp = await completeTest(body);
-      if (resp?.data?.status === 'failed') {
+      if (resp?.data?.status === "failed") {
         setFailed(true);
-      } else if (resp?.data?.status === 'passed') {
+      } else if (resp?.data?.status === "success") {
         setPassed(true);
+        setPassedTest(resp?.data);
       }
-      dispatch(resetTimer())
+      dispatch(resetTimer());
     } catch (e) {
       console.error(e);
     }
@@ -61,13 +69,21 @@ export const ClientTestPage = () => {
   };
 
   const handleClick = () => {
-    setAnswers((prev: any) => [...prev, chosenAnswers]);
+    const newAnswers = [...answers, chosenAnswers];
+
+    if (lastQuestion) {
+      finishTest({
+        chosen_answers: newAnswers,
+        course_block_id: blockId,
+        course_id: id,
+      });
+    }
+
+    setAnswers(newAnswers);
     setChosenAnswers(null);
+
     setCurrentId((prev: any) => {
-      if (lastQuestion) {
-        finishTest({ chosen_answers: answers, course_block_id: blockId, course_id: id });
-      }
-      if (prev + 1 > currentTest?.length - 1 || prev + 1 === currentTest?.length - 1) {
+      if (prev + 1 >= currentTest?.length - 1) {
         setLastQuestion(true);
       }
       return prev + 1;
@@ -97,7 +113,11 @@ export const ClientTestPage = () => {
 
   useEffect(() => {
     if (remainingSeconds <= 0 && isRunning === true) {
-      finishTest({ chosen_answers: [], course_block_id: blockId, course_id: id});
+      finishTest({
+        chosen_answers: [],
+        course_block_id: blockId,
+        course_id: id,
+      });
     }
   }, [remainingSeconds]);
 
@@ -140,7 +160,7 @@ export const ClientTestPage = () => {
         my={20}
         styles={{ bar: { background: "#91D0FF" } }}
         value={Math.ceil((answers?.length / currentTest?.length) * 100) || 0}
-        label={`${Math.ceil((answers?.length / currentTest?.length) * 100) || 0}%`}
+        label={`${answers?.length} / ${currentTest?.length}`}
         size="xl"
         radius="xl"
       />
@@ -201,8 +221,21 @@ export const ClientTestPage = () => {
           </Flex>
         </Flex>
       </Flex>
-      <FailedModal opened={failed} closeModal={() => navigate(`/app/courses/${id}`)} />
-      {/* <PassedModal opened={passed} closeModal={() => set} /> */}
+      <FailedModal
+        opened={failed}
+        closeModal={() => navigate(`/app/courses/${id}`)}
+      />
+      <PassedModal
+        opened={passed}
+        passedTest={passedTest}
+        closeModal={() => navigate(`/app/courses/${id}`)}
+        openAnswerModal={openAnswerModal}
+      />
+      <AnswerModal
+        opened={answerModal}
+        blockTitle={blockTitle}
+        closeModal={() => navigate(`/app/courses/${id}`)}
+      />
     </Flex>
   );
 };

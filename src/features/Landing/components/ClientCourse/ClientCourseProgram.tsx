@@ -68,7 +68,6 @@ export const ClientCourseProgram = ({ course }: any) => {
                     </Flex>
                   </Accordion.Control>
                   <Accordion.Panel>
-                    {console.log(item)}
                     {item?.lessons?.map((el: any, index: any) => (
                       <Flex key={index} direction="column">
                         <Text

@@ -13,6 +13,8 @@ export interface CustomModalProps {
   size?: string | number;
   children: ReactNode;
   scrolling?: boolean;
+  fullscreen?: boolean;
+  content?: string;
   withCloseButton?: boolean;
   fz?: string | number;
   [key: string]: any;
@@ -23,6 +25,8 @@ export function CustomModal({
   title,
   opened,
   children,
+  content,
+  fullscreen,
   size,
   scrolling,
   withCloseButton,
@@ -35,11 +39,12 @@ export function CustomModal({
       classNames={{ content: classes.overflow }}
       size={size}
       centered
+      fullScreen={fullscreen}
       styles={{
         title: { fontSize: fz || 16 },
         header: { borderRadius: 10 },
         body: { borderRadius: 10 },
-        content: {padding: 40}
+        content: {padding: content ? 0 : 40}
       }}
       withCloseButton={withCloseButton === false ? false : true}
       // closeOnClickOutside={false}

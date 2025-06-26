@@ -1,6 +1,11 @@
 import { Card, Flex, Grid, Progress, Text, Title } from "@mantine/core";
 import styles from "./ClientCourse.module.css";
-import { checkCourseStatus, getUserProgress, startCourse } from "@/core/api";
+import {
+  checkCourseStatus,
+  getLastSublesson,
+  getUserProgress,
+  startCourse,
+} from "@/core/api";
 import { useEffect, useState } from "react";
 import {
   addSeconds,
@@ -12,9 +17,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
 export const ClientCourseMain = ({ course }: any) => {
-  const {currentUser} = useSelector((state: RootState) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const [isStarted, setIsStarted] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [lastSublesson, setLastSublesson] = useState<any>("");
 
   const handleStart = async () => {
     await startCourse(course?.id);
@@ -48,13 +54,34 @@ export const ClientCourseMain = ({ course }: any) => {
   };
 
   const getProgress = () => {
-    const sublessons = course?.course_blocks?.flatMap((block: any) => block?.lessons?.flatMap((lesson: any) => lesson?.sublessons?.flatMap((sub: any) => sub)))?.length;
-    const finishedSublessons = course?.course_blocks?.flatMap((block: any) => block?.lessons?.flatMap((lesson: any) => lesson?.sublessons?.flatMap((sub: any) => sub?.user_ids?.filter((el:any) => Number(el) === Number(currentUser?.id)))))?.length;
-    return finishedSublessons/sublessons * 100;
-  }
+    const sublessons = course?.course_blocks?.flatMap((block: any) =>
+      block?.lessons?.flatMap((lesson: any) =>
+        lesson?.sublessons?.flatMap((sub: any) => sub)
+      )
+    )?.length;
+    const finishedSublessons = course?.course_blocks?.flatMap((block: any) =>
+      block?.lessons?.flatMap((lesson: any) =>
+        lesson?.sublessons?.flatMap((sub: any) =>
+          sub?.user_ids?.filter(
+            (el: any) => Number(el) === Number(currentUser?.id)
+          )
+        )
+      )
+    )?.length;
+    return (finishedSublessons / sublessons) * 100;
+  };
 
-  getProgress()
-  console.log(course);
+  const getLastSub = async () => {
+    const resp = await getLastSublesson();
+    setLastSublesson(resp?.data);
+  };
+
+  useEffect(() => {
+    getLastSub();
+    return () => {
+      setLastSublesson(null)
+    }
+  }, []);
 
   useEffect(() => {
     if (course?.id) getRemainingTime();
@@ -101,9 +128,12 @@ export const ClientCourseMain = ({ course }: any) => {
                 <span>
                   Ваш курс будет доступен еще: <b>{formatTimeLeft(progress)}</b>
                 </span>
-                <span className={styles.courseButton} onClick={handleStart}>
-                  Продолжить обучение
-                </span>
+                <Flex gap={24} wrap='wrap' align="center">
+                  <span className={styles.courseButton} onClick={handleStart}>
+                    Продолжить обучение
+                  </span>
+                <span style={{textDecoration: 'underline'}}>{lastSublesson?.latest_sublesson?.title}</span>
+                </Flex>
               </Flex>
             )}
           </Flex>

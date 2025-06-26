@@ -4,61 +4,95 @@ import styles from "./ClientLessonPage.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setTest, startTimer } from "@/slice/courseSlice";
-import { getTestByBlock } from "@/core/api";
+import { checkTestAvailable, getTestByBlock } from "@/core/api";
 import { useEffect, useState } from "react";
-import { addDays, differenceInHours, differenceInMinutes, differenceInSeconds, startOfDay } from "date-fns";
+import {
+  addDays,
+  differenceInHours,
+  differenceInMinutes,
+  differenceInSeconds,
+  startOfDay,
+} from "date-fns";
 
 export const TestModal = ({ block, opened, closeModal }: any) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id, blockId } = useParams();
+  const [attempts, setAttempts] = useState<any>(0);
+  const [maxAttempts, setMaxAttempts] = useState(false);
   const [attemptsPerDay, setAttemptsPerDay] = useState(false);
   const [time, setTime] = useState({
     hours: 0,
     minutes: 0,
     seconds: 0,
-    formatted: "00:00:00"
+    formatted: "00:00:00",
   });
-
-  console.log(id);
 
   const getData = async () => {
     try {
-      const response = await getTestByBlock(blockId as string);
-      dispatch(setTest(response));
+      const resp = await checkTestAvailable(id as string, blockId as string);
+      setAttempts(resp?.data);
     } catch (e: any) {
       if (
         e?.response?.data?.message ===
         "Превышено максимальное количество попыток."
+      ) {
+        setMaxAttempts(true);
+      } else if (
+        e?.response?.data?.message === "Вы уже сдавали тест сегодня."
       ) {
         setAttemptsPerDay(true);
       }
     }
   };
 
-  function startCountdownToNextDay(callback: (time: {
-    hours: number;
-    minutes: number;
-    seconds: number;
-    formatted: string;
-  }) => void) {
+  const startTest = async () => {
+    try {
+      const response = await getTestByBlock(blockId as string);
+      dispatch(setTest(response));
+      dispatch(startTimer(1800));
+      navigate("test");
+    } catch (e: any) {
+      if (
+        e?.response?.data?.message ===
+        "Превышено максимальное количество попыток."
+      ) {
+        setMaxAttempts(true);
+      } else if (
+        e?.response?.data?.message === "Вы уже сдавали тест сегодня."
+      ) {
+        setAttemptsPerDay(true);
+      }
+    }
+  };
+
+  function startCountdownToNextDay(
+    callback: (time: {
+      hours: number;
+      minutes: number;
+      seconds: number;
+      formatted: string;
+    }) => void
+  ) {
     function update() {
       const now = new Date();
       const nextMidnight = startOfDay(addDays(now, 1));
-  
+
       const hours = differenceInHours(nextMidnight, now);
       const minutes = differenceInMinutes(nextMidnight, now) % 60;
       const seconds = differenceInSeconds(nextMidnight, now) % 60;
-  
-      const formatted = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-  
+
+      const formatted = `${String(hours).padStart(2, "0")}:${String(
+        minutes
+      ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
       callback({ hours, minutes, seconds, formatted });
     }
-  
+
     // первый запуск
     update();
     const intervalId = setInterval(update, 1000);
-  
+
     // возвращаем функцию для остановки таймера
     return () => clearInterval(intervalId);
   }
@@ -91,12 +125,21 @@ export const TestModal = ({ block, opened, closeModal }: any) => {
           </Text>
           {!attemptsPerDay ? (
             <Text fz={16} fw={400} c="#615C69">
-              Вам предоставляется {block?.pivot?.max_attempts} попыток для сдачи
-              теста. В случае неудачи следующая попытка доступна через 24 часа
+              Вам предоставляется <b>{block?.pivot?.max_attempts}</b> попыток
+              для сдачи теста. В случае неудачи следующая попытка доступна через
+              24 часа.{" "}
+              {attempts?.course_block_max_attempts
+                ? `Осталось попыток - ${
+                    Number(attempts?.course_block_max_attempts) -
+                    Number(attempts?.test_attempts_count)
+                  }`
+                : ""}
             </Text>
           ) : (
             <Text fz={16} fw={400} c="#615C69">
-              Вы уже использовали сегодняшнюю попытку пройти тест.
+              {!maxAttempts
+                ? "Вы уже использовали сегодняшнюю попытку пройти тест."
+                : "Вы использовали все попытки"}
             </Text>
           )}
           {!attemptsPerDay && (
@@ -142,10 +185,7 @@ export const TestModal = ({ block, opened, closeModal }: any) => {
             <span
               className={styles.nextButton}
               style={{ textAlign: "center" }}
-              onClick={() => {
-                dispatch(startTimer(1800));
-                navigate("test");
-              }}
+              onClick={() => startTest()}
             >
               Начать тест
             </span>
