@@ -1,21 +1,15 @@
 import { Box, Flex } from "@mantine/core";
 import { Logo, LogoType } from "@/components/Logo/Logo.tsx";
-import { useDispatch } from "react-redux";
-import { resetAll } from "@/slice/resetAction";
 import { useNavigate } from "react-router-dom";
 import styles from './AppHeader.module.css'
+import { useState } from "react";
+import { LogoutModal } from "./LogoutModal";
 
 export function AppHeader() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [logoutModal, setLogoutModal] = useState(false);
 
   // const user = useSelector((state: RootState) => state.user.currentUser);
-
-  const logout = () => {
-    localStorage.removeItem('accessToken');
-    dispatch(resetAll());
-  };
-
   return (
     <Box p={20}>
       <Flex align="center" wrap="wrap">
@@ -56,7 +50,7 @@ export function AppHeader() {
                 </span>
                 <span
                 className={styles.appHeaderButton}
-                  onClick={logout}
+                  onClick={() => setLogoutModal(true)}
                 >
                   Выход
                 </span>
@@ -83,6 +77,7 @@ export function AppHeader() {
           </Flex>
         </Flex>
       </Flex>
+      <LogoutModal opened={logoutModal} onClose={() => setLogoutModal(false)} />
     </Box>
   );
 }
