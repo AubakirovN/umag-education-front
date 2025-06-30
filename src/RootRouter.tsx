@@ -1,5 +1,6 @@
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
   ScrollRestoration,
 } from "react-router-dom";
@@ -47,10 +48,10 @@ const router = createBrowserRouter([
     path: "/:status/error",
     element: <ErrorPage />,
   },
-  // {
-  //   path: "*",
-  //   element: <Navigate to="/404/error" replace />,
-  // },
+  {
+    path: "*",
+    element: <Navigate to="/404/error" replace />,
+  },
 ]);
 
 export const RootRouter = () => {

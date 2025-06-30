@@ -1,116 +1,32 @@
 import { RootState } from "@/store";
-import {
-  createStyles,
-  Title,
-  Text,
-  Button,
-  Container,
-  rem,
-} from "@mantine/core";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Text, Flex } from "@mantine/core";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-
-const useStyles = createStyles((theme) => ({
-  root: {
-    paddingTop: rem(80),
-    paddingBottom: rem(80),
-  },
-
-  label: {
-    textAlign: "center",
-    fontWeight: 900,
-    fontSize: rem(220),
-    lineHeight: 1,
-    marginBottom: `calc(${theme.spacing.xl} * 1.5)`,
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[4]
-        : theme.colors.gray[2],
-
-    [theme.fn.smallerThan("sm")]: {
-      fontSize: rem(120),
-    },
-  },
-
-  title: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    textAlign: "center",
-    fontWeight: 900,
-    fontSize: rem(38),
-
-    [theme.fn.smallerThan("sm")]: {
-      fontSize: rem(32),
-    },
-  },
-
-  description: {
-    maxWidth: rem(500),
-    margin: "auto",
-    marginTop: theme.spacing.xl,
-    marginBottom: `calc(${theme.spacing.xl} * 1.5)`,
-  },
-  button: {
-    fontSize: rem(18),
-    padding: rem(5),
-  },
-  center: {
-    textAlign: "center",
-  },
-}));
+import { useNavigate } from "react-router-dom";
+import styles from "./ErrorPage.module.css";
 
 export function ErrorPage() {
-  const { classes } = useStyles();
   const navigate = useNavigate();
-  const { t } = useTranslation();
-  const { status } = useParams();
-  const [title, setTitle] = useState<string | null>();
-  const [text, setText] = useState<string | null>();
   const isAuth = useSelector((state: RootState) => state.user.isAuthenticated);
 
-  const checkStatus = (error: string | undefined) => {
-    switch (error) {
-      case "404":
-        setTitle(t("errors.code404"));
-        setText(t("errors.text404"));
-        return;
-      case "400":
-        setTitle(t("errors.code400"));
-        setText(t("errors.text400"));
-        return;
-      case "403":
-        setTitle(t("errors.code403"));
-        setText(t("errors.text403"));
-        return;
-    }
-  };
-  useEffect(() => {
-    return checkStatus(status);
-  }, [status]);
-
   return (
-    <Container className={classes.root}>
-      <div className={classes.label}>{status}</div>
-      <Title className={classes.title}>{title}</Title>
-      <div className={classes.center}>
-        <Text
-          component="span"
-          color="dimmed"
-          size="lg"
-          align="center"
-          className={classes.description}
-        >
-          {text}
+    <Flex direction="column" align='center' gap={24} px={40} py={32}>
+      <img src="/img/404.svg" alt="404 img" width={240} height={240} />
+      <Flex direction="column" align='center' gap={12}>
+        <Text fz={48} fw={800} c="#1e1e1e">
+          Упс! Такого курса не найдено
         </Text>
-        <Button
-          variant="subtle"
-          className={classes.button}
-          onClick={() => navigate(isAuth ? "/app" : "/")}
-        >
-          на главную
-        </Button>
-      </div>
-    </Container>
+        <Text ta='center' fz={24} fw={700} c="#1f1f1f">
+          Возможно, ссылка устарела, курс был перемещён или вы ошиблись
+          в адресе.
+        </Text>
+      </Flex>
+      <span
+        className={styles.nextButton}
+        style={{ textAlign: "center" }}
+        onClick={() => navigate(isAuth ? "/app" : "/")}
+      >
+        Вернуться на главную
+      </span>
+    </Flex>
   );
 }

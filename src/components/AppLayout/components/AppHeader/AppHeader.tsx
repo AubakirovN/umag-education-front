@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import styles from './AppHeader.module.css'
 import { useState } from "react";
 import { LogoutModal } from "./LogoutModal";
+import { ContactModal } from "./ContactModal";
 
 export function AppHeader() {
   const navigate = useNavigate();
   const [logoutModal, setLogoutModal] = useState(false);
+  const [contactModal, setContactModal] = useState(false);
 
   // const user = useSelector((state: RootState) => state.user.currentUser);
   return (
@@ -42,6 +44,12 @@ export function AppHeader() {
             {/* <LanguageSwitcher /> */}
             {/* <Menu shadow="md" width={200}>
               <Menu.Target> */}
+              <span
+                className={styles.appHeaderButton}
+                  onClick={() => setContactModal(true)}
+                >
+                  Связаться с нами
+                </span>
                 <span
                 className={styles.appHeaderButton}
                   onClick={() => navigate('/app/profile')}
@@ -77,6 +85,7 @@ export function AppHeader() {
           </Flex>
         </Flex>
       </Flex>
+      <ContactModal opened={contactModal} onClose={() => setContactModal(false)} />
       <LogoutModal opened={logoutModal} onClose={() => setLogoutModal(false)} />
     </Box>
   );
