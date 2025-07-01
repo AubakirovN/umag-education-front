@@ -1,15 +1,16 @@
 .appHeaderButton {
   padding: 12px 28px;
   color: #000;
-  border: 1px solid rgba(31, 31, 31, 0.32);
-  background: #f5f5f5;
+  border: 1px solid white;
+  background: #fff;
   cursor: pointer;
   border-radius: 100px;
   font-size: 16;
   font-weight: 400;
 }
 .appHeaderButton:hover {
-  background-color: #f5f5f50f;
+  background-color: #f5f5f5;
+  border: 1px solid #f5f5f5;
 }
 .prevButton {
   cursor: pointer;

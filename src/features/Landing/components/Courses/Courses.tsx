@@ -96,9 +96,9 @@ export const Courses = ({ chosenRole }: CoursesProps) => {
           ?.map((course: any, index: number) => (
             <Grid.Col span={4} key={index} h="300px">
               <Card
-                shadow="sm"
+                // shadow="sm"
                 padding="lg"
-                radius="md"
+                radius={24}
                 withBorder
                 h="100%"
                 pos="relative"
@@ -115,24 +115,29 @@ export const Courses = ({ chosenRole }: CoursesProps) => {
                   backgroundSize: "160px 160px",
                   backgroundPosition: "bottom right",
                   backgroundRepeat: "no-repeat",
+                  boxShadow: '0px 0px 2px 0px rgba(0, 0, 0, 0.08), 0px 0px 24px 0px rgba(0, 0, 0, 0.16)',
                   "&:hover": {
-                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+                    boxShadow: '0px 0px 24px 0px rgba(2, 118, 236, 0.10)'
                   },
                 }}
               >
                 <Flex direction="column" justify="space-between" h="100%">
                   <Flex direction="column">
-                    <Text weight={500} fz={24} lh="100%">
+                    <Text weight={500} fz={24} lh="100%" mb={5}>
                       {course?.title}
                     </Text>
+                    <Flex gap={16}>
                     <Text fz={14} color="dimmed">
-                      {course?.count_lessons} уроков{" "}
-                      {course?.count_course_blocks} блока
+                      {course?.count_lessons} уроков
                     </Text>
+                    <Text fz={14} color="dimmed">
+                    {course?.count_course_blocks} блока
+                    </Text>
+                    </Flex>
                   </Flex>
                   <Group>
-                    <Badge color="orange" variant="outline" fz={12}>
-                      <span style={{color: '#000'}}>{course?.roles?.[0]?.name}</span>
+                    <Badge color="orange" bg='white' variant="outline" fz={12}>
+                      <span style={{color: '#000', textTransform: 'none'}}>{course?.roles?.[0]?.name}</span>
                     </Badge>
                   </Group>
                 </Flex>

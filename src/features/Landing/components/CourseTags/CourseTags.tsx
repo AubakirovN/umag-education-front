@@ -51,7 +51,7 @@ export function CourseRoles({ chosenRole, setChosenRole }: CourseRolesProps) {
                   backgroundColor: "#fff",
                   color: "#000",
                   fontSize: 16,
-                  padding: "16px 32px",
+                  padding: "12px 28px",
                   "&[data-checked]": {
                     backgroundColor: "#2DBE61 !important",
                     color: "#fff",

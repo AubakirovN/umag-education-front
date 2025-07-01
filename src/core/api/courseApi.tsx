@@ -25,6 +25,10 @@ export const checkCourseStatus = async (courseId: string): Promise<any> => {
   const response = await axios.get<any>(`${baseUrl}/courses/front-status/${courseId}`);
   return response.data;
 };
+export const checkIsAvailableCourse = async (courseId: string): Promise<any> => {
+  const response = await axios.get<any>(`${baseUrl}/courses/front-check/${courseId}`);
+  return response.data;
+}
 
 export const getUserProgress = async (): Promise<any> => {
   const response = await axios.get(`${baseUrl}/user/progress`);
@@ -45,8 +49,8 @@ export const completeSublesson = async (sublessonId: string): Promise<any> => {
   return response.data;
 };
 
-export const getTestByBlock = async (blockId: string): Promise<any> => {
-  const response = await axios.get(`${baseUrl}/test-questions/random/${blockId}`);
+export const getTestByBlock = async (courseId: string, blockId: string): Promise<any> => {
+  const response = await axios.get(`${baseUrl}/test-questions/random/${courseId}/${blockId}`);
   return response.data;
 };
 
@@ -55,8 +59,8 @@ export const completeTest = async (body: any): Promise<any> => {
   return response.data;
 };
 
-export const getLastSublesson = async (): Promise<any> => {
-  const response = await axios.get(`${baseUrl}/sublessons/next`);
+export const getLastSublesson = async (courseId: string): Promise<any> => {
+  const response = await axios.get(`${baseUrl}/sublessons/next/${courseId}`);
   return response.data;
 }
 

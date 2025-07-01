@@ -6,7 +6,7 @@ import { startCourse } from "@/core/api";
 import { useDispatch } from "react-redux";
 import { setCurrentSublesson } from "@/slice/courseSlice";
 
-export const ClientCourseProgram = ({ course }: any) => {
+export const ClientCourseProgram = ({ course, isAvailable }: any) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -54,7 +54,7 @@ export const ClientCourseProgram = ({ course }: any) => {
                           <Text fw={500}>{item.title}</Text>
                         </Flex>
                       </Flex>
-                      <Flex align="center">
+                      {isAvailable && <Flex align="center">
                         <span
                           className={styles.goToBlock}
                           onClick={(e) => {
@@ -64,7 +64,7 @@ export const ClientCourseProgram = ({ course }: any) => {
                         >
                           Перейти к блоку
                         </span>
-                      </Flex>
+                      </Flex>}
                     </Flex>
                   </Accordion.Control>
                   <Accordion.Panel>

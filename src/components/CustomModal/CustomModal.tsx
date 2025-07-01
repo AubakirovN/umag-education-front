@@ -15,6 +15,8 @@ export interface CustomModalProps {
   scrolling?: boolean;
   fullscreen?: boolean;
   content?: string;
+  contentRadius?: number;
+  headerPadding?: number;
   withCloseButton?: boolean;
   fz?: string | number;
   [key: string]: any;
@@ -29,6 +31,8 @@ export function CustomModal({
   fullscreen,
   size,
   scrolling,
+  contentRadius,
+  headerPadding,
   withCloseButton,
   fz,
   ...props
@@ -42,9 +46,10 @@ export function CustomModal({
       fullScreen={fullscreen}
       styles={{
         title: { fontSize: fz || 16 },
-        header: { borderRadius: 10 },
+        header: { borderRadius: 10, padding: headerPadding !== undefined ? headerPadding : 16 },
         body: { borderRadius: 10 },
-        content: {padding: content ? 0 : 40}
+        content: {padding: content ? 0 : 40, borderRadius: contentRadius ? contentRadius : 4},
+        close: { width:30, height: 30, fontSize: 30}
       }}
       withCloseButton={withCloseButton === false ? false : true}
       // closeOnClickOutside={false}

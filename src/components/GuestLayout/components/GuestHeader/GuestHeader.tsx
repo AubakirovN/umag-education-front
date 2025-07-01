@@ -26,36 +26,15 @@ export function GuestHeader() {
   }
 
   return (
-    <Box mb={20} p={20}>
-      {/* <Box className={classes.hiddenMobile} style={{ background: "#ccc" }}> */}
-      <Flex align="center" wrap="wrap">
+    <Box p={10} h={64}>
+      <Flex align="center" style={{width: '100%', height: '100%'}} wrap="wrap">
         <Flex
           justify="space-between"
           align="center"
           sx={{ height: "100%", width: "100%" }}
         >
-          <Logo type={LogoType.dark} w={100} h={60} />
-          <Flex gap={20} wrap="wrap">
-            {/* <TextInput
-              styles={{
-                input: {
-                  textAlign: "center",
-                  fontSize: 16,
-                  borderRadius: 20,
-                },
-              }}
-              rightSection={<IconSearch size={14} color="#999" />}
-              placeholder="Поиск"
-            />
-            <Button
-              variant="subtle"
-              style={{ color: "black" }}
-              radius={20}
-              fz={16}
-            >
-              Топ специалистов
-            </Button> */}
-            {/* <LanguageSwitcher /> */}
+          <Logo type={LogoType.dark} w={220} h={24} />
+          <Flex gap={20} wrap="wrap" align='center'>
             <Button
               variant="subtle"
               style={{ color: "black" }}

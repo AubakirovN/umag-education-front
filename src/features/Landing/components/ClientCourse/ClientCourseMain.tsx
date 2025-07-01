@@ -15,12 +15,18 @@ import {
 } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { useNavigate, useParams } from "react-router-dom";
 
-export const ClientCourseMain = ({ course }: any) => {
+export const ClientCourseMain = ({
+  course,
+  isAvailable,
+}: any) => {
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state: RootState) => state.user);
   const [isStarted, setIsStarted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [lastSublesson, setLastSublesson] = useState<any>("");
+  const { id } = useParams();
 
   const handleStart = async () => {
     await startCourse(course?.id);
@@ -70,22 +76,21 @@ export const ClientCourseMain = ({ course }: any) => {
     )?.length;
     return (finishedSublessons / sublessons) * 100;
   };
-
   const getLastSub = async () => {
-    const resp = await getLastSublesson();
+    const resp = await getLastSublesson(id as string);
     setLastSublesson(resp?.data);
   };
 
   useEffect(() => {
-    getLastSub();
+    if (isAvailable) getLastSub();
     return () => {
-      setLastSublesson(null)
-    }
-  }, []);
+      setLastSublesson(null);
+    };
+  }, [isAvailable]);
 
   useEffect(() => {
-    if (course?.id) getRemainingTime();
-  }, [course?.id]);
+    if (course?.id && isAvailable) getRemainingTime();
+  }, [course?.id, isAvailable]);
 
   return (
     <Card
@@ -109,32 +114,54 @@ export const ClientCourseMain = ({ course }: any) => {
                 dangerouslySetInnerHTML={{ __html: course?.description }}
               />
             </Flex>
-            {!isStarted ? (
+            {!isStarted && isAvailable ? (
               <Flex mt={12}>
                 <span className={styles.courseButton} onClick={handleStart}>
                   Начать курс
                 </span>
               </Flex>
             ) : (
-              <Flex direction="column" mt={12} gap={12}>
-                <Progress
-                  my={20}
-                  styles={{ bar: { background: "#91D0FF" } }}
-                  value={Math.ceil(getProgress())}
-                  label={`${Math.ceil(getProgress())}%`}
-                  size="xl"
-                  radius="xl"
-                />
-                <span>
-                  Ваш курс будет доступен еще: <b>{formatTimeLeft(progress)}</b>
-                </span>
-                <Flex gap={24} wrap='wrap' align="center">
-                  <span className={styles.courseButton} onClick={handleStart}>
-                    Продолжить обучение
-                  </span>
-                <span style={{textDecoration: 'underline'}}>{lastSublesson?.latest_sublesson?.title}</span>
-                </Flex>
-              </Flex>
+              <>
+                {isAvailable && (
+                  <Flex direction="column" mt={12} gap={12}>
+                    <Progress
+                      my={20}
+                      styles={{ bar: { background: "#91D0FF" } }}
+                      value={Math.ceil(getProgress()) || 0}
+                      label={`${Math.ceil(getProgress())}%`}
+                      size="xl"
+                      radius="xl"
+                    />
+                    <span>
+                      Ваш курс будет доступен еще:{" "}
+                      <b>{formatTimeLeft(progress)}</b>
+                    </span>
+                    <Flex gap={24} wrap="wrap" align="center">
+                      <span
+                        className={styles.courseButton}
+                        onClick={() => {
+                          const blockId =
+                            lastSublesson?.next_course_block_id;
+                          if (blockId) {
+                            navigate(
+                              `/app/courses/${course?.id}/block/${blockId}`
+                            );
+                          } else {
+                            navigate(
+                              `/app/courses/${course?.id}/block/${course?.course_blocks?.[0]?.id}`
+                            );
+                          }
+                        }}
+                      >
+                        Продолжить обучение
+                      </span>
+                      <span style={{ textDecoration: "underline" }}>
+                        {lastSublesson?.latest_sublesson?.title}
+                      </span>
+                    </Flex>
+                  </Flex>
+                )}
+              </>
             )}
           </Flex>
         </Grid.Col>

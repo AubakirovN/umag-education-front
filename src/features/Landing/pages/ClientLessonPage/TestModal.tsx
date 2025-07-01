@@ -48,7 +48,7 @@ export const TestModal = ({ block, opened, closeModal }: any) => {
 
   const startTest = async () => {
     try {
-      const response = await getTestByBlock(blockId as string);
+      const response = await getTestByBlock("1", blockId as string);
       dispatch(setTest(response));
       dispatch(startTimer(600));
       navigate("test");

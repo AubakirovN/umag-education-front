@@ -1,4 +1,4 @@
-import lightLogo from "../../lightLogo.svg";
+// import lightLogo from "../../lightLogo.svg";
 import darkLogo from "../../darkLogo.svg";
 import { Link } from "react-router-dom";
 
@@ -16,7 +16,7 @@ export function Logo({ type, w, h }: LogoProps) {
   return (
     <Link to="/">
       <img
-        src={type === LogoType.light ? darkLogo : lightLogo}
+        src={type === LogoType.light ? darkLogo : '/img/logo.svg'}
         width={w}
         height={h}
         alt="logo"

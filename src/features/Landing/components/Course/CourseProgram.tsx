@@ -42,7 +42,7 @@ export const CourseProgram = ({ course }: any) => {
                           <Text fw={500}>{item.title}</Text>
                         </Flex>
                       </Flex>
-                      <Flex align="center">
+                      {/* <Flex align="center">
                         <span
                           className={styles.goToBlock}
                           onClick={() => dispatch(openLoginModal())}
@@ -56,7 +56,7 @@ export const CourseProgram = ({ course }: any) => {
                         label="70%"
                         size="xl"
                         radius="xl"
-                      />
+                      /> */}
                     </Flex>
                   </Accordion.Control>
                   <Accordion.Panel>

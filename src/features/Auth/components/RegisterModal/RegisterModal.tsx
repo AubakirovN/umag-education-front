@@ -105,6 +105,8 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
       onClose={closeModal}
       title="Регистрация"
       size={600}
+      contentRadius={40}
+      headerPadding={0}
       fz={24}
     >
       {err ? (
@@ -112,6 +114,7 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
           icon={<IconAlertCircleFilled size="1rem" />}
           title={t("loginForm.errors.title")}
           color="red"
+          mt={24}
           mb="lg"
         >
           {err}
@@ -123,43 +126,52 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
             onSubmit(values);
           })}
         >
-          <Flex direction='column' gap={14}>
-          <TextInput
-            label={t("loginForm.fio")}
-            placeholder="Введите ваше полное имя"
-            {...form.getInputProps("name")}
-            styles={{input: {height: 60, borderRadius: 12}}}
-            withAsterisk
-          />
-          <TextInput
-            label={t("loginForm.email")}
-            placeholder={t("loginForm.enterEmail")}
-            {...form.getInputProps("email")}
-            styles={{input: {height: 60, borderRadius: 12}}}
-            withAsterisk
-          />
-          <InputBase
-            label={t("loginForm.phone")}
-            {...form.getInputProps("phone")}
-            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-              setErr("");
-              // setRole("");
-              handleNumber(e.target.value);
-              if (e.target.value?.length === 17) {
-                try {
-                  await getUserRole({ phone: e.target.value });
-                  // setRole(response?.data?.role_name);
-                } catch (e: any) {
-                  setErr(e.response.data?.message);
+          <Flex direction="column" gap={14} mt={!err ? 24 : 0}>
+            <TextInput
+              label={t("loginForm.fio")}
+              placeholder="Введите ваше полное имя"
+              {...form.getInputProps("name")}
+              styles={{
+                input: { height: 60, borderRadius: 12, fontSize: 16 },
+                label: { fontSize: 16 },
+              }}
+              withAsterisk
+            />
+            <TextInput
+              label={t("loginForm.email")}
+              placeholder={t("loginForm.enterEmail")}
+              {...form.getInputProps("email")}
+              styles={{
+                input: { height: 60, borderRadius: 12, fontSize: 16 },
+                label: { fontSize: 16 },
+              }}
+              withAsterisk
+            />
+            <InputBase
+              label={t("loginForm.phone")}
+              {...form.getInputProps("phone")}
+              onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                setErr("");
+                // setRole("");
+                handleNumber(e.target.value);
+                if (e.target.value?.length === 17) {
+                  try {
+                    await getUserRole({ phone: e.target.value });
+                    // setRole(response?.data?.role_name);
+                  } catch (e: any) {
+                    setErr(e.response.data?.message);
+                  }
                 }
-              }
-            }}
-            styles={{input: {height: 60, borderRadius: 12}}}
-            component={IMaskInput}
-            placeholder="+7 (XXX) XXX-XX-XX"
-            mask="+7 (000) 000-00-00"
-            withAsterisk
-          />
+              }}
+              styles={{
+                input: { height: 60, borderRadius: 12, fontSize: 16 },
+                label: { fontSize: 16 },
+              }}
+              component={IMaskInput}
+              placeholder="+7 (XXX) XXX-XX-XX"
+              mask="+7 (000) 000-00-00"
+              withAsterisk
+            />
           </Flex>
           {/* <TextInput value={role} disabled label="Роль" withAsterisk /> */}
           {/* <PasswordInput
@@ -172,12 +184,18 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
           <Button
             fullWidth
             type="submit"
-            variant="outline"
-            c="#2DBE61"
-            radius={10}
-            h={60}
-            style={{border: '1px solid #2DBE61', fontSize: 16, fontWeight: 500}}
-            mt="md"
+            c="#fff"
+            radius={100}
+            mt={24}
+            sx={{
+              backgroundColor: "#2DBE61",
+              border: "none",
+              fontSize: 16,
+              fontWeight: 500,
+              "&:hover": {
+                backgroundColor: "#209b4d", // темнее, например
+              },
+            }}
           >
             Подать заявку
           </Button>
