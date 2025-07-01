@@ -16,10 +16,14 @@ export function AppLayout() {
   }, [isAuth]);
 
   return (
-    <>
-      <AppHeader />
+    <div
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
+      <div style={{ flex: 1 }}>
+        <AppHeader />
         <Outlet />
+      </div>
       <Footer />
-    </>
+    </div>
   );
 }

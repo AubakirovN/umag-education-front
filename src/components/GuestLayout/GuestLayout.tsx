@@ -18,11 +18,16 @@ export function GuestLayout() {
   }, [isAuth]);
 
   return (
-    <div className="wrapper">
-      <GuestHeader />
-      <Container size={1234} p={20}>
-        <Outlet />
-      </Container>
+    <div
+      className="wrapper"
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
+      <div style={{ flex: 1 }}>
+        <GuestHeader />
+        <Container size={1234} p={20}>
+          <Outlet />
+        </Container>
+      </div>
       <Footer />
     </div>
   );
