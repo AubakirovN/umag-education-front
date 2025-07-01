@@ -1,12 +1,8 @@
-import { Accordion, Card, Flex, Progress, Text, Title } from "@mantine/core";
+import { Accordion, Card, Flex, Text, Title } from "@mantine/core";
 import styles from "./Course.module.css";
 import ReactPlayer from "react-player/youtube";
-import { useDispatch } from "react-redux";
-import { openLoginModal } from "@/slice/userSlice";
 
 export const CourseProgram = ({ course }: any) => {
-
-  const dispatch = useDispatch();
 
   return (
     <Flex direction="column">
