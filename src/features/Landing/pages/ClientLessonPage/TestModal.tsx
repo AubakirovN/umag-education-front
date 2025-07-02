@@ -50,7 +50,7 @@ export const TestModal = ({ block, opened, closeModal }: any) => {
     try {
       const response = await getTestByBlock(id as string, blockId as string);
       dispatch(setTest(response));
-      dispatch(startTimer(600));
+      dispatch(startTimer(1800));
       navigate("test");
     } catch (e: any) {
       if (
