@@ -151,7 +151,7 @@ export const TestModal = ({ block, opened, closeModal }: any) => {
                   alt="list logo"
                 />
                 <Text fz={14} fw={400} c="#615C69">
-                  30 вопросов
+                  20 вопросов
                 </Text>
               </Flex>
               <Flex gap={8} align="center">
@@ -175,7 +175,7 @@ export const TestModal = ({ block, opened, closeModal }: any) => {
               />
               <Text fz={14} fw={400} c="#615C69">
                 Для успешного прохождения теста необходимо набрать{" "}
-                {block?.pivot?.pass_count} баллов из 30
+                {block?.pivot?.pass_count} баллов из 20
               </Text>
             </Flex>
           )}

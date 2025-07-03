@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FailedModal } from "./FailedModal";
 import { PassedModal } from "./PassedModal";
 import { AnswerModal } from "./AnswerModal";
+import { NotPassedModal } from "./NotPassedModal";
 
 export const ClientTestPage = () => {
   const dispatch = useDispatch();
@@ -29,18 +30,23 @@ export const ClientTestPage = () => {
   const [passed, setPassed] = useState(false);
   const [failed, setFailed] = useState(false);
   const [passedTest, setPassedTest] = useState<any>(null);
+  const [notPassed, setNotPassed] = useState(false);
   const [answerModal, setAnswerModal] = useState(false);
 
   const openAnswerModal = () => {
     setPassed(false);
     setAnswerModal(true);
   };
-
   const finishTest = async (body: any) => {
     try {
       const resp = await completeTest(body);
       if (resp?.data?.status === "failed") {
-        setFailed(true);
+        if (JSON.parse(resp?.data?.chosen_answers)?.length > 0) {
+          setNotPassed(true);
+          setPassedTest(resp?.data);
+        } else {
+          setFailed(true);
+        }
       } else if (resp?.data?.status === "success") {
         setPassed(true);
         setPassedTest(resp?.data);
@@ -234,6 +240,11 @@ export const ClientTestPage = () => {
       <AnswerModal
         opened={answerModal}
         blockTitle={blockTitle}
+        closeModal={() => navigate(`/app/courses/${id}`)}
+      />
+      <NotPassedModal
+        opened={notPassed}
+        passedTest={passedTest}
         closeModal={() => navigate(`/app/courses/${id}`)}
       />
     </Flex>
