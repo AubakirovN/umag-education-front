@@ -74,7 +74,7 @@ export const AnswerModal = ({ opened, closeModal, blockTitle }: any) => {
             alt="list logo"
           />
           <Text fz={14} fw={400} c="#615C69">
-            Ваш результат: {result?.count_correct} / 30
+            Ваш результат: {result?.count_correct} / 20
           </Text>
         </Flex>
         <Flex

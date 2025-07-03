@@ -32,7 +32,7 @@ export const PassedModal = ({
               alt="list logo"
             />
             <Text fz={14} fw={400} c="#615C69">
-              Ваш результат: {passedTest?.count_correct} / 30
+              Ваш результат: {passedTest?.count_correct} / 20
             </Text>
           </Flex>
           <Flex direction="column" justify="center" gap={12}>
