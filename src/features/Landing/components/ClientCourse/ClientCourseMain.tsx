@@ -16,11 +16,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { CertModal } from "../CertModal/CertModal";
+import { ContactModal } from "@/components/AppLayout/components/AppHeader/ContactModal";
 
 export const ClientCourseMain = ({ course, isAvailable }: any) => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: RootState) => state.user);
   const [cert, setCert] = useState(false);
+  const [contactModal, setContactModal] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -130,7 +132,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
               <>
                 {isAvailable && isArchive ? (
                   <Flex mt={12}>
-                    <span className={styles.courseButton} onClick={handleStart}>
+                    <span className={styles.courseButton} onClick={() => setContactModal(true)}>
                       Связаться с нами
                     </span>
                   </Flex>
@@ -193,6 +195,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
         </Grid.Col>
       </Grid>
       <CertModal opened={cert} onClose={() => setCert(false)} />
+      <ContactModal opened={contactModal} onClose={() => setContactModal(false)} />
     </Card>
   );
 };

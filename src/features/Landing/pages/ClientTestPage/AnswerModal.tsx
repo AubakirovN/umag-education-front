@@ -86,6 +86,7 @@ export const AnswerModal = ({ opened, closeModal, blockTitle }: any) => {
           py={50}
           style={{ background: "#fff", borderRadius: 30 }}
         >
+          {console.log(result)}
           {result?.result?.map((item: any) => (
             <Flex direction="column" gap={24} w={600}>
               <Text fz={24} fw={300} c="#2c2c2c">
@@ -94,7 +95,7 @@ export const AnswerModal = ({ opened, closeModal, blockTitle }: any) => {
               {JSON.stringify(item?.chosen_answers) ===
               JSON.stringify(item?.correct_answers) ? (
                 <Flex direction="column">
-                  {item?.correct_answers?.map((el: any) => (
+                  {item?.map((el: any) => (
                     <Flex
                       gap={10}
                       style={{
