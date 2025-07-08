@@ -1,7 +1,7 @@
 import { completeTest, getCourse } from "@/core/api";
 import { decrementTimer, resetTimer } from "@/slice/courseSlice";
 import { RootState } from "@/store";
-import { Button, Checkbox, Flex, Progress, Radio, Text } from "@mantine/core";
+import { Button, Flex, Progress, Radio, Text } from "@mantine/core";
 import { addSeconds, differenceInSeconds } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
