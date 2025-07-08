@@ -137,7 +137,7 @@ export const Courses = ({ chosenRole }: CoursesProps) => {
                   </Flex>
                   <Group>
                     <Badge color="orange" bg='white' variant="outline" fz={12}>
-                      <span style={{color: '#000', textTransform: 'none'}}>{course?.roles?.[0]?.name}</span>
+                      <span style={{color: '#000', textTransform: 'none'}}>{course?.roles?.[0]?.name || 'Все'}</span>
                     </Badge>
                   </Group>
                 </Flex>

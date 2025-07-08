@@ -1,7 +1,7 @@
 import { completeTest, getCourse } from "@/core/api";
 import { decrementTimer, resetTimer } from "@/slice/courseSlice";
 import { RootState } from "@/store";
-import { Button, Checkbox, Flex, Progress, Text } from "@mantine/core";
+import { Button, Checkbox, Flex, Progress, Radio, Text } from "@mantine/core";
 import { addSeconds, differenceInSeconds } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -78,8 +78,12 @@ export const ClientTestPage = () => {
     const newAnswers = [...answers, chosenAnswers];
 
     if (lastQuestion) {
+      const answ = answers?.map((item: any) => ({
+        ...item,
+        answers: [item.answers],
+      }));
       finishTest({
-        chosen_answers: newAnswers,
+        chosen_answers: answ,
         course_block_id: blockId,
         course_id: id,
       });
@@ -184,7 +188,7 @@ export const ClientTestPage = () => {
               {currentTest?.[currentId]?.question}
             </Text>
             <Flex direction="column" my={24}>
-              <Checkbox.Group
+              <Radio.Group
                 value={chosenAnswers?.answers || []}
                 onChange={(value: any) =>
                   setChosenAnswers({
@@ -197,7 +201,7 @@ export const ClientTestPage = () => {
                   {currentTest?.[currentId]?.answers?.length > 0 &&
                     JSON.parse(currentTest?.[currentId]?.answers)?.map(
                       (el: any, index: number) => (
-                        <Checkbox
+                        <Radio
                           key={index}
                           p={16}
                           value={el?.name}
@@ -206,7 +210,7 @@ export const ClientTestPage = () => {
                       )
                     )}
                 </Flex>
-              </Checkbox.Group>
+              </Radio.Group>
             </Flex>
             <Flex justify="center">
               <Button

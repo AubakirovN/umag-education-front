@@ -1,0 +1,20 @@
+.prevButton {
+  cursor: pointer;
+  padding: 12px 28px;
+  background: #f5f5f5;
+  border-radius: 100px;
+  color: #000;
+}
+.prevButton:hover {
+  background: #d3d3d3;
+}
+.nextButton {
+  cursor: pointer;
+  padding: 12px 28px;
+  background: #2DBE61;
+  border-radius: 100px;
+  color: #fff;
+}
+.nextButton:hover {
+  background-color: #209b4d;
+}

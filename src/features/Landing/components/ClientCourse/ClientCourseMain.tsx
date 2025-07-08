@@ -3,7 +3,6 @@ import styles from "./ClientCourse.module.css";
 import {
   checkCourseStatus,
   getLastSublesson,
-  getUserProgress,
   startCourse,
 } from "@/core/api";
 import { useEffect, useState } from "react";
@@ -16,29 +15,36 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useNavigate, useParams } from "react-router-dom";
+import { CertModal } from "../CertModal/CertModal";
 
-export const ClientCourseMain = ({
-  course,
-  isAvailable,
-}: any) => {
+export const ClientCourseMain = ({ course, isAvailable }: any) => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: RootState) => state.user);
+  const [cert, setCert] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [isArchive, setIsArchive] = useState(false);
   const [progress, setProgress] = useState(0);
   const [lastSublesson, setLastSublesson] = useState<any>("");
   const { id } = useParams();
 
   const handleStart = async () => {
     await startCourse(course?.id);
-    const progressResponse = await getUserProgress();
-    setProgress(progressResponse || 0);
   };
 
   const getRemainingTime = async () => {
+    const now = new Date().getTime();
     try {
       const response = await checkCourseStatus(course?.id as string);
-      setIsStarted(true);
-      setProgress(response?.data?.deadline_timestamp);
+      if (response?.data?.status !== "notstarted") {
+        setIsStarted(true);
+        setProgress(response?.data?.deadline_timestamp);
+        if (response?.data?.status !== "completed" && now > progress) {
+          setIsArchive(true);
+        }
+        if (response?.data?.status === "completed") {
+          setCert(true);
+        }
+      }
     } catch (e) {
       setIsStarted(false);
       console.log(e);
@@ -122,7 +128,25 @@ export const ClientCourseMain = ({
               </Flex>
             ) : (
               <>
-                {isAvailable && (
+                {isAvailable && isArchive ? (
+                  <Flex mt={12}>
+                    <span className={styles.courseButton} onClick={handleStart}>
+                      Связаться с нами
+                    </span>
+                  </Flex>
+                ) : (
+                  ""
+                )}
+                {isAvailable && !isArchive && cert ? (
+                  <Flex mt={12}>
+                    <span className={styles.courseButton} onClick={handleStart}>
+                      Посмотреть сертификат
+                    </span>
+                  </Flex>
+                ) : (
+                  ""
+                )}
+                {isAvailable && !isArchive && (
                   <Flex direction="column" mt={12} gap={12}>
                     <Progress
                       my={20}
@@ -140,8 +164,7 @@ export const ClientCourseMain = ({
                       <span
                         className={styles.courseButton}
                         onClick={() => {
-                          const blockId =
-                            lastSublesson?.next_course_block_id;
+                          const blockId = lastSublesson?.next_course_block_id;
                           if (blockId) {
                             navigate(
                               `/app/courses/${course?.id}/block/${blockId}`
@@ -169,6 +192,7 @@ export const ClientCourseMain = ({
           <div className={styles.courseImage} />
         </Grid.Col>
       </Grid>
+      <CertModal opened={cert} onClose={() => setCert(false)} />
     </Card>
   );
 };

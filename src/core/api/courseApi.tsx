@@ -73,3 +73,8 @@ export const getTestResult = async (blockId: string): Promise<any> => {
   const response = await axios.get(`${baseUrl}/test-attempts/get-result/${blockId}`);
   return response.data;
 }
+
+export const getCertification = async (courseId: string): Promise<any> => {
+  const response = await axios.get(`${baseUrl}/courses/front-certificate/${courseId}`);
+  return response.data;
+}
