@@ -1,4 +1,4 @@
-import { Card, Flex, Grid, Progress, Text, Title } from "@mantine/core";
+import { Card, Flex, Grid, Progress } from "@mantine/core";
 import styles from "./ClientCourse.module.css";
 import { checkCourseStatus, getLastSublesson, startCourse } from "@/core/api";
 import { useEffect, useState } from "react";
