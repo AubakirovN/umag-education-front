@@ -1,14 +1,8 @@
 import { Card, Flex, Grid, Progress, Text, Title } from "@mantine/core";
 import styles from "./ClientCourse.module.css";
-import {
-  checkCourseStatus,
-  getLastSublesson,
-  startCourse,
-} from "@/core/api";
+import { checkCourseStatus, getLastSublesson, startCourse } from "@/core/api";
 import { useEffect, useState } from "react";
-import {
-  intervalToDuration,
-} from "date-fns";
+import { intervalToDuration } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,31 +16,33 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
   const [contactModal, setContactModal] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [remainingTime, setRemainingTime] = useState(0);
   const [lastSublesson, setLastSublesson] = useState<any>("");
   const [isCompleted, setIsCompleted] = useState(false);
   const { id } = useParams();
 
   const handleStart = async () => {
     await startCourse(course?.id);
-    await getRemainingTime()
+    await getRemainingTime();
   };
-  
+
   const getRemainingTime = async () => {
-    const now = new Date().getTime();
     try {
       const response = await checkCourseStatus(course?.id as string);
+      console.log(response)
       if (response?.data?.status !== "notstarted") {
         setIsStarted(true);
-        setProgress(response?.data?.remaining_time);
-        if (response?.data?.status !== "completed" && now > progress) {
-          setIsArchive(true);
+        setRemainingTime(response?.data?.remaining_time);
+        if (response?.data?.status === "inprogress") {
+          if (remainingTime < 0) {
+            setIsArchive(true);
+          } else {
+            setRemainingTime(response?.data?.remaining_time);
+          }
         }
         if (response?.data?.status === "completed") {
           setIsCompleted(true);
         }
-      } else if (response?.data?.status === 'inprogress') {
-        setProgress(response?.data?.remaining_time);
       }
     } catch (e) {
       setIsStarted(false);
@@ -54,13 +50,12 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
     }
   };
 
-
   const formatTimeLeft = (ms: number): string => {
     const duration = intervalToDuration({
       start: 0,
       end: ms,
     });
-  
+
     return `${duration.days} дней ${duration.hours} часов ${duration.minutes} минут`;
   };
 
@@ -129,7 +124,10 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
               <>
                 {isAvailable && isArchive ? (
                   <Flex mt={12}>
-                    <span className={styles.courseButton} onClick={() => setContactModal(true)}>
+                    <span
+                      className={styles.courseButton}
+                      onClick={() => setContactModal(true)}
+                    >
                       Связаться с поддержкой
                     </span>
                   </Flex>
@@ -138,7 +136,10 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
                 )}
                 {isAvailable && !isArchive && isCompleted ? (
                   <Flex mt={12}>
-                    <span className={styles.courseButton} onClick={() => setCert(true)}>
+                    <span
+                      className={styles.courseButton}
+                      onClick={() => setCert(true)}
+                    >
                       Посмотреть сертификат
                     </span>
                   </Flex>
@@ -157,7 +158,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
                     />
                     <span>
                       Ваш курс будет доступен еще:{" "}
-                      <b>{formatTimeLeft(progress)}</b>
+                      <b>{formatTimeLeft(remainingTime)}</b>
                     </span>
                     <Flex gap={24} wrap="wrap" align="center">
                       <span
@@ -192,7 +193,10 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
         </Grid.Col>
       </Grid>
       <CertModal opened={cert} onClose={() => setCert(false)} />
-      <ContactModal opened={contactModal} onClose={() => setContactModal(false)} />
+      <ContactModal
+        opened={contactModal}
+        onClose={() => setContactModal(false)}
+      />
     </Card>
   );
 };
