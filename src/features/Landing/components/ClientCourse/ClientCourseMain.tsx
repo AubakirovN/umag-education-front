@@ -31,6 +31,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
 
   const handleStart = async () => {
     await startCourse(course?.id);
+    await getRemainingTime()
   };
 
   const getRemainingTime = async () => {
@@ -133,7 +134,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
                 {isAvailable && isArchive ? (
                   <Flex mt={12}>
                     <span className={styles.courseButton} onClick={() => setContactModal(true)}>
-                      Связаться с нами
+                      Связаться с поддержкой
                     </span>
                   </Flex>
                 ) : (
@@ -141,7 +142,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
                 )}
                 {isAvailable && !isArchive && cert ? (
                   <Flex mt={12}>
-                    <span className={styles.courseButton} onClick={handleStart}>
+                    <span className={styles.courseButton} onClick={() => setCert(true)}>
                       Посмотреть сертификат
                     </span>
                   </Flex>

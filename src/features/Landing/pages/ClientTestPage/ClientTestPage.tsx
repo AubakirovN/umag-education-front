@@ -1,4 +1,4 @@
-import { completeTest, getCourse } from "@/core/api";
+import { checkCourseStatus, completeTest, getCourse } from "@/core/api";
 import { decrementTimer, resetTimer } from "@/slice/courseSlice";
 import { RootState } from "@/store";
 import { Button, Flex, Progress, Radio, Text } from "@mantine/core";
@@ -10,6 +10,8 @@ import { FailedModal } from "./FailedModal";
 import { PassedModal } from "./PassedModal";
 import { AnswerModal } from "./AnswerModal";
 import { NotPassedModal } from "./NotPassedModal";
+import { CompletedModal } from "./CompletedModal";
+import { CertModal } from "../../components/CertModal/CertModal";
 
 export const ClientTestPage = () => {
   const dispatch = useDispatch();
@@ -32,6 +34,8 @@ export const ClientTestPage = () => {
   const [passedTest, setPassedTest] = useState<any>(null);
   const [notPassed, setNotPassed] = useState(false);
   const [answerModal, setAnswerModal] = useState(false);
+  const [completedModal, setCompletedModal] = useState(false);
+  const [cert, setCert] = useState(false);
 
   const openAnswerModal = () => {
     setPassed(false);
@@ -48,8 +52,14 @@ export const ClientTestPage = () => {
           setFailed(true);
         }
       } else if (resp?.data?.status === "success") {
-        setPassed(true);
-        setPassedTest(resp?.data);
+        const courseStatus = await checkCourseStatus(id as string);
+        if (courseStatus?.data?.status !== "completed") {
+          setPassed(true);
+          setPassedTest(resp?.data);
+        } else {
+          setCompletedModal(true);
+          setPassedTest(resp?.data);
+        }
       }
       dispatch(resetTimer());
     } catch (e) {
@@ -251,6 +261,14 @@ export const ClientTestPage = () => {
         passedTest={passedTest}
         closeModal={() => navigate(`/app/courses/${id}`)}
       />
+      <CompletedModal
+        opened={completedModal}
+        passedTest={passedTest}
+        closeModal={() => navigate(`/app/courses/${id}`)}
+        openAnswerModal={openAnswerModal}
+        openCert={() => setCert(true)}
+      />
+      <CertModal opened={cert} onClose={() => setCert(false)} />
     </Flex>
   );
 };

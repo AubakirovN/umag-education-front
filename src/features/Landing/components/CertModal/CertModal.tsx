@@ -11,7 +11,10 @@ export const CertModal = ({ opened, onClose }: any) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<any>();
 
-  const handlePrint = useReactToPrint({ contentRef });
+  const handlePrint = useReactToPrint({
+    contentRef,
+    documentTitle: `Сертификат ${data?.fullname}`,
+  });
 
   const getCert = async () => {
     const response = await getCertification(id as string);
@@ -56,7 +59,12 @@ export const CertModal = ({ opened, onClose }: any) => {
           fz={48}
           fw={800}
           c="#1e1e1e"
-          style={{ position: "absolute", left: 230, top: 80 }}
+          style={{
+            fontFamily: "Mont, sans-serif",
+            position: "absolute",
+            left: 230,
+            top: 80,
+          }}
         >
           Сертификат
         </Text>
@@ -80,7 +88,13 @@ export const CertModal = ({ opened, onClose }: any) => {
           fz={24}
           fw={700}
           c="#00802D"
-          style={{ position: "absolute", left: 270, top: 230, maxWidth: 400 }}
+          style={{
+            fontFamily: "Mont-light, sans-serif",
+            position: "absolute",
+            left: 270,
+            top: 230,
+            maxWidth: 400,
+          }}
         >
           {data?.fullname}
         </Text>
@@ -97,7 +111,13 @@ export const CertModal = ({ opened, onClose }: any) => {
           fw={700}
           c="#1f1f1f"
           lh="30px"
-          style={{ position: "absolute", left: 270, top: 290, maxWidth: 450 }}
+          style={{
+            fontFamily: "Mont-light, sans-serif",
+            position: "absolute",
+            left: 270,
+            top: 290,
+            maxWidth: 450,
+          }}
         >
           {data?.course?.title}
         </Text>
@@ -123,7 +143,13 @@ export const CertModal = ({ opened, onClose }: any) => {
           Алматы | {data?.date}
         </Text>
       </div>
-      <Flex direction="column" justify='center' align='center' w="100%" gap={10}>
+      <Flex
+        direction="column"
+        justify="center"
+        align="center"
+        w="100%"
+        gap={10}
+      >
         <span
           className={styles.nextButton}
           style={{ textAlign: "center", width: 560 }}
