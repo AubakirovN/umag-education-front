@@ -1,6 +1,7 @@
 import { CustomModal } from "@/components/CustomModal";
 import { Flex, Text } from "@mantine/core";
 import styles from "./FailedModal.module.css";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const CompletedModal = ({
   opened,
@@ -9,10 +10,12 @@ export const CompletedModal = ({
   openAnswerModal,
   openCert,
 }: any) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   return (
     <CustomModal
       opened={opened}
-      onClose={closeModal}
+      onClose={() => navigate(`/app/courses/${id}`)}
       withCloseButton={false}
       title=""
       fz={24}
@@ -47,7 +50,10 @@ export const CompletedModal = ({
             <span
               className={styles.prevButton}
               style={{ textAlign: "center" }}
-              onClick={() => openAnswerModal()}
+              onClick={() => {
+                closeModal();
+                openAnswerModal();
+              }}
             >
               Посмотреть ответы
             </span>

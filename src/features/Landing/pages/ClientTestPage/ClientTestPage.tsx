@@ -264,7 +264,7 @@ export const ClientTestPage = () => {
       <CompletedModal
         opened={completedModal}
         passedTest={passedTest}
-        closeModal={() => navigate(`/app/courses/${id}`)}
+        closeModal={() => setCompletedModal(false)}
         openAnswerModal={openAnswerModal}
         openCert={() => setCert(true)}
       />

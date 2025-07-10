@@ -29,7 +29,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
   const getRemainingTime = async () => {
     try {
       const response = await checkCourseStatus(course?.id as string);
-      console.log(response)
+      console.log(response);
       if (response?.data?.status !== "notstarted") {
         setIsStarted(true);
         setRemainingTime(response?.data?.remaining_time);
@@ -39,8 +39,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
           } else {
             setRemainingTime(response?.data?.remaining_time);
           }
-        }
-        if (response?.data?.status === "completed") {
+        } else if (response?.data?.status === "completed") {
           setIsCompleted(true);
         }
       }
