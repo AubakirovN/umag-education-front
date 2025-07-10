@@ -80,6 +80,10 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
     setLastSublesson(resp?.data);
   };
 
+  const stripInlineStyles = (html: string) => {
+    return html?.replace(/style="[^"]*"/g, "");
+  };
+
   useEffect(() => {
     if (isAvailable) getLastSub();
     return () => {
@@ -105,12 +109,11 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
       <Grid h="100%">
         <Grid.Col span={7}>
           <Flex direction="column" justify="space-between" h="100%">
-            <Flex direction="column">
-              <Title>{course?.title}</Title>
-              <Text
-                fz={14}
-                my={20}
-                dangerouslySetInnerHTML={{ __html: course?.description }}
+            <Flex direction="column" className={styles.courseDescription}>
+              <span className={styles.title}>{course?.title}</span>
+              <span
+                className={styles.description}
+                dangerouslySetInnerHTML={{ __html: stripInlineStyles(course?.description) }}
               />
             </Flex>
             {!isStarted && isAvailable ? (

@@ -66,3 +66,25 @@
     padding: 50px 80px;
   }
 }
+
+.courseDescription :global(*) {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.title {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 48px !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+  font-style: normal !important;
+}
+
+.description {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 400 !important;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  line-height: normal !important;
+  font-style: normal !important;
+}
