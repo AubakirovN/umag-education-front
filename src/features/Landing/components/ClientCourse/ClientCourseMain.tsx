@@ -7,10 +7,7 @@ import {
 } from "@/core/api";
 import { useEffect, useState } from "react";
 import {
-  addSeconds,
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
+  intervalToDuration,
 } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -27,26 +24,29 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
   const [isArchive, setIsArchive] = useState(false);
   const [progress, setProgress] = useState(0);
   const [lastSublesson, setLastSublesson] = useState<any>("");
+  const [isCompleted, setIsCompleted] = useState(false);
   const { id } = useParams();
 
   const handleStart = async () => {
     await startCourse(course?.id);
     await getRemainingTime()
   };
-
+  
   const getRemainingTime = async () => {
     const now = new Date().getTime();
     try {
       const response = await checkCourseStatus(course?.id as string);
       if (response?.data?.status !== "notstarted") {
         setIsStarted(true);
-        setProgress(response?.data?.deadline_timestamp);
+        setProgress(response?.data?.remaining_time);
         if (response?.data?.status !== "completed" && now > progress) {
           setIsArchive(true);
         }
         if (response?.data?.status === "completed") {
-          setCert(true);
+          setIsCompleted(true);
         }
+      } else if (response?.data?.status === 'inprogress') {
+        setProgress(response?.data?.remaining_time);
       }
     } catch (e) {
       setIsStarted(false);
@@ -54,18 +54,14 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
     }
   };
 
-  const formatTimeLeft = (timestampMs: any) => {
-    const now = new Date();
-    const future = new Date(timestampMs);
 
-    const days = differenceInDays(future, now);
-    const hours = differenceInHours(future, addSeconds(now, days * 86400));
-    const minutes = differenceInMinutes(
-      future,
-      addSeconds(now, days * 86400 + hours * 3600)
-    );
-
-    return `${days} дней ${hours} часов ${minutes} минут`;
+  const formatTimeLeft = (ms: number): string => {
+    const duration = intervalToDuration({
+      start: 0,
+      end: ms,
+    });
+  
+    return `${duration.days} дней ${duration.hours} часов ${duration.minutes} минут`;
   };
 
   const getProgress = () => {
@@ -140,7 +136,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
                 ) : (
                   ""
                 )}
-                {isAvailable && !isArchive && cert ? (
+                {isAvailable && !isArchive && isCompleted ? (
                   <Flex mt={12}>
                     <span className={styles.courseButton} onClick={() => setCert(true)}>
                       Посмотреть сертификат
@@ -149,7 +145,7 @@ export const ClientCourseMain = ({ course, isAvailable }: any) => {
                 ) : (
                   ""
                 )}
-                {isAvailable && !isArchive && (
+                {isAvailable && !isArchive && !isCompleted && (
                   <Flex direction="column" mt={12} gap={12}>
                     <Progress
                       my={20}
