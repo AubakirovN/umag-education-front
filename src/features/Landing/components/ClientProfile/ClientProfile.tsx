@@ -65,7 +65,7 @@ export const ClientProfile = () => {
           message: (
             <Flex gap={16} align="center">
               <IconCircleCheck size={30} />
-              <Text fz={24} fw={500} color="#000">
+              <Text fz={24} fw={500} lh='normal' color="#000">
                 Изменения сохранены успешно
               </Text>
             </Flex>

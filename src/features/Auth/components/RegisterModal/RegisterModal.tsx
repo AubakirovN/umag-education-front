@@ -8,6 +8,7 @@ import { IconAlertCircleFilled } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IMaskInput } from "react-imask";
+import styles from "./RegisterModal.module.css";
 
 interface RegisterModalProps {
   opened: boolean;
@@ -173,32 +174,19 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
               withAsterisk
             />
           </Flex>
-          {/* <TextInput value={role} disabled label="Роль" withAsterisk /> */}
-          {/* <PasswordInput
-          label={t("loginForm.password.label")}
-          placeholder={t("loginForm.password.placeholder")}
-          mt="md"
-          withAsterisk
-          {...form.getInputProps("password")}
-        /> */}
-          <Button
-            fullWidth
+          <button
             type="submit"
-            c="#fff"
-            radius={100}
-            mt={24}
-            sx={{
-              backgroundColor: "#2DBE61",
+            style={{
               border: "none",
-              fontSize: 16,
+              width: "100%",
+              marginTop: 24,
+              fontSize: 15,
               fontWeight: 500,
-              "&:hover": {
-                backgroundColor: "#209b4d", // темнее, например
-              },
             }}
+            className={styles.nextButton}
           >
             Подать заявку
-          </Button>
+          </button>
         </form>
       ) : (
         <div>

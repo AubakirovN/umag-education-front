@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IMaskInput } from "react-imask";
 import { useDispatch } from "react-redux";
+import styles from './LoginModal.module.css'
 
 interface LoginModalProps {
   opened: boolean;
@@ -97,7 +98,8 @@ export function LoginModal({
     <CustomModal
       opened={opened}
       onClose={closeModal}
-      title="Войти"
+      title="Вход"
+      contentRadius={40}
       fz={24}
       size={600}
     >
@@ -119,9 +121,10 @@ export function LoginModal({
         <InputBase
           label={t("loginForm.phone")}
           {...form.getInputProps("phone")}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleNumber(e.target.value)
-          }
+          // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          //   handleNumber(e.target.value)
+          // }
+          onAccept={(value: string) => handleNumber(value)} // <-- важно
           styles={{ input: { height: 60, borderRadius: 12 } }}
           component={IMaskInput}
           placeholder="+7 (XXX) XXX-XX-XX"
@@ -152,22 +155,13 @@ export function LoginModal({
           </Button>
         </Flex>
         <Flex justify="flex-end" gap={10}>
-          <Button
-            fullWidth
+          <button
             type="submit"
-            variant="outline"
-            c="#2DBE61"
-            radius={10}
-            h={60}
-            style={{
-              border: "1px solid #2DBE61",
-              fontSize: 16,
-              fontWeight: 500,
-            }}
-            mt="md"
+            style={{ border: "none", width: "100%", marginTop: 24 }}
+            className={styles.nextButton}
           >
             {t("loginForm.submitButton")}
-          </Button>
+          </button>
         </Flex>
         <Flex align="center" my={5} gap={5}>
           <Text>Еще нет аккаунта?</Text>

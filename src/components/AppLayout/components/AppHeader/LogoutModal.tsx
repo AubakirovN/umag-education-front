@@ -14,14 +14,14 @@ export const LogoutModal = ({ opened, onClose }: any) => {
   };
 
   return (
-    <CustomModal opened={opened} onClose={onClose} title="" withCloseButton={false} size={660}>
+    <CustomModal opened={opened} onClose={onClose} title="" contentRadius={40} withCloseButton={false} size={660}>
       <Flex direction="column" gap={24}>
         <Flex direction="column" gap={16}>
           <Text fz={24} fw={500} c="#181818">
             До скорого!
           </Text>
           <Text fz={16} fw={400} c="#615C69">
-            Вы действительно хотите выйти из аккаунта? Вернётесь —
+            Вы действительно хотите выйти из аккаунта?<br/> Вернётесь —
             и мы продолжим с того места, где остановились.
           </Text>
         </Flex>
@@ -35,7 +35,7 @@ export const LogoutModal = ({ opened, onClose }: any) => {
             </span>
             <span
               className={styles.prevButton}
-              style={{ textAlign: "center" }}
+              style={{ textAlign: "center", border: '1px solid #1F1F1F52' }}
               onClick={onClose}
             >
               Остаться

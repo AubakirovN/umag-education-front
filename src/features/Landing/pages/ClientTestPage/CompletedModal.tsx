@@ -20,6 +20,7 @@ export const CompletedModal = ({
       title=""
       fz={24}
       size={600}
+      contentRadius={40}
     >
       <Flex direction="column" p={0} gap={24}>
         <Flex direction="column" p={0} gap={16}>

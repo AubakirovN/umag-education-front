@@ -51,6 +51,8 @@ export const ClientLessonPage = () => {
     }
   };
 
+  console.log(blocks);
+  console.log(currentSublesson);
   const goToNext = async () => {
     const allSublessons = getAllSublessons();
 
@@ -61,6 +63,35 @@ export const ClientLessonPage = () => {
     if (currentIndex === -1) return;
 
     await completeSublesson(currentSublesson?.id);
+
+    const blocksCopy = blocks.map((item: any) => {
+      if (Number(item.id) === Number(blockId)) {
+        return {
+          ...item,
+          lessons: item.lessons.map((el: any) => {
+            if (Number(el.id) === Number(currentSublesson?.lesson_id)) {
+              return {
+                ...el,
+                sublessons: el.sublessons.map((x: any) => {
+                  if (x.id === currentSublesson.id) {
+                    if (!x.user_ids.includes(currentUser.id)) {
+                      return {
+                        ...x,
+                        user_ids: [...x.user_ids, currentUser.id],
+                      };
+                    }
+                  }
+                  return x;
+                }),
+              };
+            }
+            return el;
+          }),
+        };
+      }
+      return item;
+    });
+    setBlocks(blocksCopy);
 
     const nextSublesson = allSublessons[currentIndex + 1];
 
@@ -109,6 +140,10 @@ export const ClientLessonPage = () => {
     setBlocks(courseBlocks);
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentSublesson]);
+
   return (
     <Flex w="100%" style={{ minHeight: "calc(100vh - 181px)" }}>
       <Box w={300} p="md" bg="#f5f5f5" pos="sticky">
@@ -141,7 +176,7 @@ export const ClientLessonPage = () => {
           >
             {blocks
               ?.find((el: any) => Number(el?.id) === Number(blockId))
-              ?.lessons.map((lesson: any) => (
+              ?.lessons.map((lesson: any, index: number) => (
                 <Accordion.Item
                   key={lesson?.id}
                   value={String(lesson?.id)}
@@ -156,11 +191,11 @@ export const ClientLessonPage = () => {
                         alt="icon"
                       />
                       <Text fz={16} fw={500}>
-                        {lesson?.title}
+                        {index + 1}. {lesson?.title}
                       </Text>
                     </Flex>
                   </Accordion.Control>
-                  <Accordion.Panel>
+                  <Accordion.Panel style={{background: 'white', borderRadius: 12}}>
                     {lesson?.sublessons?.map((sub: any) => (
                       <div
                         key={sub.id}
@@ -197,51 +232,6 @@ export const ClientLessonPage = () => {
                   </Accordion.Panel>
                 </Accordion.Item>
               ))}
-            {/* <Accordion.Item
-              key={randomId()}
-              value="test"
-              bg="#f5f5f5 !important"
-              style={{ border: "none" }}
-            >
-              <Accordion.Control>
-                <Flex gap={8} align="center">
-                  <img
-                    src="/img/started.svg"
-                    style={{ width: 20, height: 20 }}
-                    alt="icon"
-                  />
-                  <Text fz={16} fw={500}>
-                    Тест
-                  </Text>
-                </Flex>
-              </Accordion.Control>
-              <Accordion.Panel>
-                <div
-                  key={randomId()}
-                  className={styles.subTitle}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: 10,
-                    backgroundColor:
-                      currentSublesson?.id === "test" ? "#E8F1FE" : "",
-                    borderLeft:
-                      currentSublesson?.id === "test"
-                        ? "3px solid #7481F4"
-                        : "",
-                  }}
-                  onClick={() => openTestModal()}
-                >
-                  <img
-                    src="/img/not-started.svg"
-                    style={{ width: 20, height: 20 }}
-                    alt="icon"
-                  />
-                  <Text>Тест</Text>
-                </div>
-              </Accordion.Panel>
-            </Accordion.Item> */}
           </Accordion>
         </ScrollArea>
       </Box>
@@ -276,19 +266,11 @@ export const ClientLessonPage = () => {
               />
             </div>
           )}
-          {currentSublesson?.description ? (
             <div
               dangerouslySetInnerHTML={{
-                __html: currentSublesson?.description,
+                __html: currentSublesson?.description || '',
               }}
             />
-          ) : (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: currentSublesson?.description,
-              }}
-            />
-          )}
         </Flex>
         <Flex justify="center" gap={12}>
           {Number(
