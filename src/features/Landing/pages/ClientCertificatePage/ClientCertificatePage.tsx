@@ -1,21 +1,13 @@
-import { CustomModal } from "@/components/CustomModal";
-import { Flex, Text } from "@mantine/core";
-import styles from "./CertModal.module.css";
 import { getCertification } from "@/core/api";
-import { useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { useReactToPrint } from "react-to-print";
-import { QRCodeCanvas } from "qrcode.react";
+import { Flex, Text } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import styles from "./ClientCertificatePage.module.css";
 
-export const CertModal = ({ opened, onClose }: any) => {
+export const ClientCertificatePage = () => {
   const { id } = useParams();
-  const contentRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const [data, setData] = useState<any>();
-
-  const handlePrint = useReactToPrint({
-    contentRef,
-    documentTitle: `Сертификат ${data?.fullname}`,
-  });
 
   const getCert = async () => {
     const response = await getCertification(id as string);
@@ -23,22 +15,19 @@ export const CertModal = ({ opened, onClose }: any) => {
   };
 
   useEffect(() => {
-    if (opened) getCert();
-  }, [opened]);
+    getCert();
+  }, []);
 
   return (
-    <CustomModal
-      opened={opened}
-      onClose={onClose}
-      title=""
-      withCloseButton={false}
-      content="no"
-      inner="no"
-      contentBg={true}
-      scrolling
-    >
+    <Flex direction="column" align='center' w="100%" h="100%" p={24}>
+      <Text ta='center' fz={32} fw={500} lh="normal">
+        Это подлинный сертификат
+      </Text>
+      <Text ta='center' fz={16} fw={300} lh='24px' w={762}>
+        Вы перешли по официальной QR-ссылке. Этот сертификат выдан через нашу
+        обучающую платформу и подтверждён системой.
+      </Text>
       <div
-        ref={contentRef}
         style={{
           position: "relative",
           width: 842,
@@ -143,11 +132,6 @@ export const CertModal = ({ opened, onClose }: any) => {
         >
           Алматы | {data?.date}
         </Text>
-        <QRCodeCanvas
-          value={`https://academy.umag.kz/app/courses/${id}/certificate`}
-          size={80}
-          style={{ position: "absolute", right: 60, bottom: 50 }}
-        />
       </div>
       <Flex
         direction="column"
@@ -157,20 +141,13 @@ export const CertModal = ({ opened, onClose }: any) => {
         gap={10}
       >
         <span
-          className={styles.nextButton}
-          style={{ textAlign: "center", width: 560 }}
-          onClick={() => handlePrint()}
-        >
-          Распечатать сертификат
-        </span>
-        <span
           className={styles.prevButton}
-          style={{ textAlign: "center", width: 560 }}
-          onClick={() => onClose()}
+          style={{ textAlign: "center", width: 560, border: '1px solid #1F1F1F52' }}
+          onClick={() => navigate(`/courses/${id}`)}
         >
           Закрыть
         </span>
       </Flex>
-    </CustomModal>
+    </Flex>
   );
 };
