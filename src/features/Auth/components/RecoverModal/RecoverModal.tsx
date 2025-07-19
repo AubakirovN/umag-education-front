@@ -46,9 +46,6 @@ export const RecoverModal = ({ opened, onClose }: RecoverModalProps) => {
 
   const handleNumber = (value: string) => {
     form.setFieldValue("phone", value);
-    if (value?.length <= 4) {
-      form.setFieldValue("phone", "");
-    }
   };
 
   const closeModal = () => {

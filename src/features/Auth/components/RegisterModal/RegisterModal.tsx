@@ -72,9 +72,6 @@ export function RegisterModal({ opened, onClose }: RegisterModalProps) {
 
   const handleNumber = (value: string) => {
     form.setFieldValue("phone", value);
-    if (value?.length <= 4) {
-      form.setFieldValue("phone", "");
-    }
   };
 
   const closeModal = () => {

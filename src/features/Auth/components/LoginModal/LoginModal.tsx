@@ -73,9 +73,6 @@ export function LoginModal({
 
   const handleNumber = (value: string) => {
     form.setFieldValue("phone", value);
-    if (value?.length <= 4) {
-      form.setFieldValue("phone", "");
-    }
   };
 
   const onSubmit = async (values: LoginDto) => {
@@ -121,9 +118,6 @@ export function LoginModal({
         <InputBase
           label={t("loginForm.phone")}
           {...form.getInputProps("phone")}
-          // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          //   handleNumber(e.target.value)
-          // }
           onAccept={(value: string) => handleNumber(value)} // <-- важно
           styles={{ input: { height: 60, borderRadius: 12 } }}
           component={IMaskInput}
