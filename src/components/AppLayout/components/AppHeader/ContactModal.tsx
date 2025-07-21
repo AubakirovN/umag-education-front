@@ -1,6 +1,7 @@
 import { CustomModal } from "@/components/CustomModal";
 import { Flex, Grid, Text } from "@mantine/core";
 import styles from "./AppHeader.module.css";
+import { QRCodeCanvas } from "qrcode.react";
 
 export const ContactModal = ({ opened, onClose }: any) => {
   return (
@@ -31,17 +32,17 @@ export const ContactModal = ({ opened, onClose }: any) => {
           </Grid.Col>
           <Grid.Col span={6}>
             <Flex direction="column" gap={20}>
-              <Flex direction="column">
-                <Text fz={16} fw={400}>
-                  Почта для отзывов и предложений:
+              <Flex direction="column" align='center'>
+                <Text ta='center' fz={16} fw={400}>
+                  Почта для отзывов и предложений:
                 </Text>
                 <a href="mailto:academy@umag.kz">academy@umag.kz</a>
               </Flex>
-              <Flex direction="column" gap={12}>
+              <Flex direction="column" align='center' gap={12}>
                 <Text fz={16} fw={400}>
                   WhatsApp для быстрой связи:
                 </Text>
-                QR HERE
+                <QRCodeCanvas value="https://wa.me/77071109081" size={156} />
               </Flex>
             </Flex>
           </Grid.Col>
