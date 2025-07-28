@@ -13,6 +13,11 @@ export const getCourse = async (id: string): Promise<any> => {
   return response.data;
 };
 
+export const getLessonsByBlock = async (courseId: string, blockId: string): Promise<any> => {
+  const response = await axios.get<any>(`${baseUrl}/courses/sublessons/${courseId}/${blockId}`);
+  return response.data;
+};
+
 export const getRoles = async (params: any): Promise<any> => {
   const response = await axios.get<any>(`${baseUrl}/roles-front`, { params });
   return response.data;

@@ -1,6 +1,6 @@
-import { completeSublesson, getCourse } from "@/core/api";
+import { completeSublesson, getCourse, getLessonsByBlock } from "@/core/api";
 import { Accordion, Box, Flex, ScrollArea, Text } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./ClientLessonPage.module.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,8 +15,28 @@ export const ClientLessonPage = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
   const { currentSublesson } = useSelector((state: RootState) => state.course);
   const [blocks, setBlocks] = useState<any>([]);
+  const [lessons, setLessons] = useState<any>([]);
   const [testModal, setTestModal] = useState(false);
   const [openedLessons, setOpenedLessons] = useState<string[]>([]);
+
+  const processedDescription = useMemo(() => {
+    if (!currentSublesson?.description) return "";
+
+    // Добавляем target="_blank" и rel="noopener noreferrer" ко всем <a>
+    return currentSublesson.description.replace(
+      /<a\s+(?![^>]*target=)[^>]*href="([^"]+)"[^>]*>/g,
+      (match: any, href: any) => {
+        // Если уже есть другие атрибуты, вставим перед >
+        if (match.endsWith(">")) {
+          return match.replace(
+            />$/,
+            ` target="_blank" rel="noopener noreferrer">`
+          );
+        }
+        return match;
+      }
+    );
+  }, [currentSublesson?.description]);
 
   const openTestModal = () => {
     setTestModal(true);
@@ -27,15 +47,7 @@ export const ClientLessonPage = () => {
   };
 
   const getAllSublessons = () => {
-    const currentBlock = blocks?.find(
-      (block: any) => Number(block?.id) === Number(blockId)
-    );
-
-    if (!currentBlock) return [];
-
-    return currentBlock?.lessons?.flatMap(
-      (lesson: any) => lesson?.sublessons || []
-    );
+    return lessons?.flatMap((lesson: any) => lesson?.sublessons || []);
   };
 
   const goToPrev = () => {
@@ -51,8 +63,6 @@ export const ClientLessonPage = () => {
     }
   };
 
-  console.log(blocks);
-  console.log(currentSublesson);
   const goToNext = async () => {
     const allSublessons = getAllSublessons();
 
@@ -64,34 +74,27 @@ export const ClientLessonPage = () => {
 
     await completeSublesson(currentSublesson?.id);
 
-    const blocksCopy = blocks.map((item: any) => {
-      if (Number(item.id) === Number(blockId)) {
-        return {
-          ...item,
-          lessons: item.lessons.map((el: any) => {
-            if (Number(el.id) === Number(currentSublesson?.lesson_id)) {
-              return {
-                ...el,
-                sublessons: el.sublessons.map((x: any) => {
-                  if (x.id === currentSublesson.id) {
-                    if (!x.user_ids.includes(currentUser.id)) {
-                      return {
-                        ...x,
-                        user_ids: [...x.user_ids, currentUser.id],
-                      };
-                    }
-                  }
-                  return x;
-                }),
-              };
-            }
-            return el;
-          }),
-        };
-      }
-      return item;
-    });
-    setBlocks(blocksCopy);
+    setLessons(
+      lessons.map((el: any) => {
+        if (Number(el.id) === Number(currentSublesson?.lesson_id)) {
+          return {
+            ...el,
+            sublessons: el.sublessons.map((x: any) => {
+              if (x.id === currentSublesson.id) {
+                if (!x.user_ids.includes(currentUser.id)) {
+                  return {
+                    ...x,
+                    user_ids: [...x.user_ids, currentUser.id],
+                  };
+                }
+              }
+              return x;
+            }),
+          };
+        }
+        return el;
+      })
+    );
 
     const nextSublesson = allSublessons[currentIndex + 1];
 
@@ -138,6 +141,11 @@ export const ClientLessonPage = () => {
     const response = await getCourse(id as string);
     const courseBlocks = response?.data?.course_blocks;
     setBlocks(courseBlocks);
+    const lessonsResponse = await getLessonsByBlock(
+      id as string,
+      blockId as string
+    );
+    setLessons(lessonsResponse?.data);
   };
 
   useEffect(() => {
@@ -174,64 +182,63 @@ export const ClientLessonPage = () => {
             value={openedLessons}
             onChange={setOpenedLessons}
           >
-            {blocks
-              ?.find((el: any) => Number(el?.id) === Number(blockId))
-              ?.lessons.map((lesson: any, index: number) => (
-                <Accordion.Item
-                  key={lesson?.id}
-                  value={String(lesson?.id)}
-                  bg="#f5f5f5 !important"
-                  style={{ border: "none" }}
+            {lessons.map((lesson: any, index: number) => (
+              <Accordion.Item
+                key={lesson?.id}
+                value={String(lesson?.id)}
+                bg="#f5f5f5 !important"
+                style={{ border: "none" }}
+              >
+                <Accordion.Control>
+                  <Flex gap={8} align="center">
+                    <img
+                      src="/img/started.svg"
+                      style={{ width: 20, height: 20 }}
+                      alt="icon"
+                    />
+                    <Text fz={16} fw={500}>
+                      {index + 1}. {lesson?.title}
+                    </Text>
+                  </Flex>
+                </Accordion.Control>
+                <Accordion.Panel
+                  style={{ background: "white", borderRadius: 12 }}
                 >
-                  <Accordion.Control>
-                    <Flex gap={8} align="center">
+                  {lesson?.sublessons?.map((sub: any) => (
+                    <div
+                      key={sub.id}
+                      className={styles.subTitle}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        padding: 10,
+                        backgroundColor:
+                          sub?.id === currentSublesson?.id ? "#E8F1FE" : "",
+                        borderLeft:
+                          sub?.id === currentSublesson?.id
+                            ? "3px solid #7481F4"
+                            : "",
+                      }}
+                      onClick={() => dispatch(setCurrentSublesson(sub))}
+                    >
                       <img
-                        src="/img/started.svg"
+                        src={
+                          sub?.user_ids?.some(
+                            (el: any) => Number(el) === Number(currentUser?.id)
+                          )
+                            ? "/img/started.svg"
+                            : "/img/not-started.svg"
+                        }
                         style={{ width: 20, height: 20 }}
                         alt="icon"
                       />
-                      <Text fz={16} fw={500}>
-                        {index + 1}. {lesson?.title}
-                      </Text>
-                    </Flex>
-                  </Accordion.Control>
-                  <Accordion.Panel style={{background: 'white', borderRadius: 12}}>
-                    {lesson?.sublessons?.map((sub: any) => (
-                      <div
-                        key={sub.id}
-                        className={styles.subTitle}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 8,
-                          padding: 10,
-                          backgroundColor:
-                            sub?.id === currentSublesson?.id ? "#E8F1FE" : "",
-                          borderLeft:
-                            sub?.id === currentSublesson?.id
-                              ? "3px solid #7481F4"
-                              : "",
-                        }}
-                        onClick={() => dispatch(setCurrentSublesson(sub))}
-                      >
-                        <img
-                          src={
-                            sub?.user_ids?.some(
-                              (el: any) =>
-                                Number(el) === Number(currentUser?.id)
-                            )
-                              ? "/img/started.svg"
-                              : "/img/not-started.svg"
-                          }
-                          style={{ width: 20, height: 20 }}
-                          alt="icon"
-                        />
-                        <Text>{sub.title}</Text>
-                      </div>
-                    ))}
-                  </Accordion.Panel>
-                </Accordion.Item>
-              ))}
+                      <Text>{sub.title}</Text>
+                    </div>
+                  ))}
+                </Accordion.Panel>
+              </Accordion.Item>
+            ))}
           </Accordion>
         </ScrollArea>
       </Box>
@@ -266,17 +273,15 @@ export const ClientLessonPage = () => {
               />
             </div>
           )}
-            <div
-              dangerouslySetInnerHTML={{
-                __html: currentSublesson?.description || '',
-              }}
-            />
+          <div
+            dangerouslySetInnerHTML={{
+              __html: processedDescription,
+            }}
+          />
         </Flex>
         <Flex justify="center" gap={12}>
-          {Number(
-            blocks?.find((item: any) => Number(item?.id) === Number(blockId))
-              ?.lessons?.[0]?.sublessons?.[0]?.id
-          ) !== Number(currentSublesson?.id) && (
+          {Number(lessons?.[0]?.sublessons?.[0]?.id) !==
+            Number(currentSublesson?.id) && (
             <div className={styles.prevButton} onClick={goToPrev}>
               Предыдущая тема
             </div>
