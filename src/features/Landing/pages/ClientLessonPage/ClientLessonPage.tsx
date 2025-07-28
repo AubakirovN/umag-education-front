@@ -25,7 +25,7 @@ export const ClientLessonPage = () => {
     // Добавляем target="_blank" и rel="noopener noreferrer" ко всем <a>
     return currentSublesson.description.replace(
       /<a\s+(?![^>]*target=)[^>]*href="([^"]+)"[^>]*>/g,
-      (match: any, href: any) => {
+      (match: any) => {
         // Если уже есть другие атрибуты, вставим перед >
         if (match.endsWith(">")) {
           return match.replace(
