@@ -1,16 +1,17 @@
-import { getCertification } from "@/core/api";
+import { getGuestCertification } from "@/core/api";
 import { Flex, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import styles from "./ClientCertificatePage.module.css";
+import styles from "./CertificatePage.module.css";
 
-export const ClientCertificatePage = () => {
-  const { id } = useParams();
+export const CertificatePage = () => {
+  const { qrLink } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState<any>();
 
   const getCert = async () => {
-    const response = await getCertification(id as string);
+    const response = await getGuestCertification(qrLink as string);
+    console.log(response)
     setData(response?.data);
   };
 
@@ -143,7 +144,7 @@ export const ClientCertificatePage = () => {
         <span
           className={styles.prevButton}
           style={{ textAlign: "center", width: 560, border: '1px solid #1F1F1F52' }}
-          onClick={() => navigate(`/courses/${id}`)}
+          onClick={() => navigate(`/`)}
         >
           Закрыть
         </span>

@@ -1,8 +1,6 @@
 import axios from "axios";
 import { baseUrl } from "../constant";
 
-console.log("Base URL:", baseUrl);
-
 export const getCourses = async (params: any): Promise<any> => {
   const response = await axios.get<any>(`${baseUrl}/courses`, { params });
   return response.data;
@@ -83,5 +81,10 @@ export const getTestResult = async (blockId: string): Promise<any> => {
 
 export const getCertification = async (courseId: string): Promise<any> => {
   const response = await axios.get(`${baseUrl}/courses/front-certificate/${courseId}`);
+  return response.data;
+}
+
+export const getGuestCertification = async (qrLink: string): Promise<any> => {
+  const response = await axios.get(`${baseUrl}/courses/front/verify-certificate/${qrLink}`);
   return response.data;
 }

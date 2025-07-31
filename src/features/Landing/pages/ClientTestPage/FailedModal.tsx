@@ -22,8 +22,7 @@ export const FailedModal = ({ opened, closeModal }: any) => {
             Время на выполнение истекло.
           </Text>
           <Text fz={16} fw={400} c="#615C69">
-            К сожалению, вы исчерпали все попытки на сегодня. Попробуйте снова
-            завтра.
+            К сожалению, вы не прошли курс. Попробуйте попытку через 2 часа
           </Text>
           <span
             className={styles.prevButton}

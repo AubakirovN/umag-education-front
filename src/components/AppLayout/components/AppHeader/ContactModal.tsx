@@ -36,7 +36,7 @@ export const ContactModal = ({ opened, onClose }: any) => {
                 <Text ta='center' fz={16} fw={400}>
                   Почта для отзывов и предложений:
                 </Text>
-                <a href="mailto:academy@umag.kz">academy@umag.kz</a>
+                <a href="mailto:education@umag.kz">education@umag.kz</a>
               </Flex>
               <Flex direction="column" align='center' gap={12}>
                 <Text fz={16} fw={400}>

@@ -144,7 +144,7 @@ export const CertModal = ({ opened, onClose }: any) => {
           Алматы | {data?.date}
         </Text>
         <QRCodeCanvas
-          value={`https://academy.umag.kz/app/courses/${id}/certificate`}
+          value={data?.qr}
           size={80}
           style={{ position: "absolute", right: 60, bottom: 50 }}
         />

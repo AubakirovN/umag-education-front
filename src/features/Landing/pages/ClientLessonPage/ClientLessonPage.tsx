@@ -22,11 +22,9 @@ export const ClientLessonPage = () => {
   const processedDescription = useMemo(() => {
     if (!currentSublesson?.description) return "";
 
-    // Добавляем target="_blank" и rel="noopener noreferrer" ко всем <a>
     return currentSublesson.description.replace(
       /<a\s+(?![^>]*target=)[^>]*href="([^"]+)"[^>]*>/g,
       (match: any) => {
-        // Если уже есть другие атрибуты, вставим перед >
         if (match.endsWith(">")) {
           return match.replace(
             />$/,
@@ -146,6 +144,7 @@ export const ClientLessonPage = () => {
       blockId as string
     );
     setLessons(lessonsResponse?.data);
+    dispatch(setCurrentSublesson(lessonsResponse?.data?.[0]?.sublessons?.[0]))
   };
 
   useEffect(() => {
